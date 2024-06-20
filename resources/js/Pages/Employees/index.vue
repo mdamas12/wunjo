@@ -25,7 +25,14 @@ const deleteEmployee = (id) => {
             <h1 class="font-semibold text-xl text-gray-800 leading-tigh">
                 Empleados
             </h1>
-            <Link :href="route('employees.create')" class="w-full">
+            <Link
+                v-if="
+                    $page.props.user['roles'] == 'supra' ||
+                    $page.props.user['roles'] == 'administrator'
+                "
+                :href="route('employees.create')"
+                class="w-full"
+            >
                 <svg
                     class="h-10 w-10 text-cyan-700"
                     width="24"
@@ -125,6 +132,11 @@ const deleteEmployee = (id) => {
                                 <Link
                                     :href="route('employees.edit', employee.id)"
                                     class="text-white bg-cyan-700 hover:bg-cyan-800 focus:ring-4 focus:outline-none focus:ring-cyan-300 font-medium rounded-lg text-sm p-2.5 text-center inline-flex items-center me-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                                    v-if="
+                                        $page.props.user['roles'] == 'supra' ||
+                                        $page.props.user['roles'] ==
+                                            'administrator'
+                                    "
                                 >
                                     <svg
                                         class="h-4 w-4 text-white-700"
@@ -146,9 +158,14 @@ const deleteEmployee = (id) => {
                                     <span class="sr-only">Edit</span>
                                 </Link>
 
-                                <Link
+                                <button
                                     @click="deleteEmployee(employee.id)"
                                     class="text-white bg-cyan-700 hover:bg-cyan-800 focus:ring-4 focus:outline-none focus:ring-cyan-300 font-medium rounded-lg text-sm p-2.5 text-center inline-flex items-center me-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                                    v-if="
+                                        $page.props.user['roles'] == 'supra' ||
+                                        $page.props.user['roles'] ==
+                                            'administrator'
+                                    "
                                 >
                                     <svg
                                         class="h-4 w-4 text-white-700"
@@ -173,7 +190,7 @@ const deleteEmployee = (id) => {
                                         />
                                     </svg>
                                     <span class="sr-only">Delete</span>
-                                </Link>
+                                </button>
                             </td>
                         </tr>
                     </tbody>

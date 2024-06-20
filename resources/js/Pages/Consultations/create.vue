@@ -28,7 +28,6 @@ const form = useForm({
     branch_id: "",
     patient_id: "",
     employee_id: "",
-    branch_id: "",
     status_payment: "PENDIENTE",
     status: "PENDIENTE",
 });

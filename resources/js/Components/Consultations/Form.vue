@@ -50,9 +50,6 @@ defineEmits(["submit"]);
                         id="branch_id"
                         v-model="form.branch_id"
                     >
-                        <option v-if="updating == true" :value="form.branch_id">
-                            {{ form.branch_name }}
-                        </option>
                         <option v-for="branch in branches" :value="branch.id">
                             {{ branch.name }}
                         </option>
@@ -158,9 +155,9 @@ defineEmits(["submit"]);
                     v-model="form.status"
                     class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
                 >
-                    <option selected="">Selecciona un estado</option>
-                    <option value="pendiente">Pendiente</option>
-                    <option value="realizada">Realizada</option>
+                    <option value="PENDIENTE">PENDIENTE</option>
+                    <option value="REALIZADA">REALIZADA</option>
+                    <option value="CANCELADA">CANCELADA</option>
                 </select>
                 <InputError :message="$page.props.errors.status" />
             </div>

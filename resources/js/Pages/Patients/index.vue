@@ -28,10 +28,15 @@ const deletePatient = (patient) => {
             <h1 class="font-semibold text-xl text-gray-800 leading-tigh">
                 Pacientes
             </h1>
-            <div v-if="success_message">
-                <h3>{{ success_message }}</h3>
-            </div>
-            <Link :href="route('patients.create')" class="w-full">
+
+            <Link
+                v-if="
+                    $page.props.user['roles'] == 'supra' ||
+                    $page.props.user['roles'] == 'administrator'
+                "
+                :href="route('patients.create')"
+                class="w-full"
+            >
                 <svg
                     class="h-10 w-10 text-cyan-700"
                     width="24"
@@ -119,6 +124,11 @@ const deletePatient = (patient) => {
                                 </button>
 
                                 <Link
+                                    v-if="
+                                        $page.props.user['roles'] == 'supra' ||
+                                        $page.props.user['roles'] ==
+                                            'administrator'
+                                    "
                                     :href="route('patients.edit', patient.id)"
                                     class="text-white bg-cyan-700 hover:bg-cyan-800 focus:ring-4 focus:outline-none focus:ring-cyan-300 font-medium rounded-lg text-sm p-2.5 text-center inline-flex items-center me-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
                                 >
@@ -143,6 +153,11 @@ const deletePatient = (patient) => {
                                 </Link>
 
                                 <button
+                                    v-if="
+                                        $page.props.user['roles'] == 'supra' ||
+                                        $page.props.user['roles'] ==
+                                            'administrator'
+                                    "
                                     @click="deletePatient(patient)"
                                     class="text-white bg-cyan-700 hover:bg-cyan-800 focus:ring-4 focus:outline-none focus:ring-cyan-300 font-medium rounded-lg text-sm p-2.5 text-center inline-flex items-center me-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
                                 >

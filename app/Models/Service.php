@@ -15,4 +15,14 @@ class Service extends Model
     {
         return $this->hasMany(Package::class, 'id');
     } 
+
+    public function consultation_detail():HasMany
+    {
+        return $this->hasMany(Consultation_detail::class, 'id');
+    } 
+
+    public function payment_detail():HasMany
+    {
+        return $this->hasMany(Payment_detail::class, 'id');
+    } 
 }

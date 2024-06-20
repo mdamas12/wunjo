@@ -16,6 +16,7 @@ return new class extends Migration
             $table->unsignedBigInteger('consultation_id')->unsigned();
             $table->unsignedBigInteger('service_id')->unsigned();
             $table->unsignedBigInteger('package_id')->unsigned();
+            $table->float('amount_payable');
           //  $table->unsignedBigInteger('promotion_detail_id')->unsigned();
             $table->timestamps();
             

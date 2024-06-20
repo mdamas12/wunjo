@@ -60,12 +60,15 @@ const StatusConsultation = (consultation) => {
         <template #header>
             <h1 class="font-semibold text-xl text-gray-800 leading-tigh">
                 Consultas
-                {{ sede }}
-                <div v-if="success_message">
-                    <h3>{{ success_message }}</h3>
-                </div>
             </h1>
-            <Link :href="route('consultations.create')" class="w-full">
+            <Link
+                v-if="
+                    $page.props.user['roles'] == 'supra' ||
+                    $page.props.user['roles'] == 'administrator'
+                "
+                :href="route('consultations.create')"
+                class="w-full"
+            >
                 <svg
                     class="h-10 w-10 text-cyan-700"
                     width="24"
@@ -149,8 +152,13 @@ const StatusConsultation = (consultation) => {
                             <td
                                 class="text-center border-grey-light border hover:bg-gray-100 p-3 text-red-400 hover:text-red-600 hover:font-medium cursor-pointer"
                             >
-                                <button
-                                    @click="open_Detail(consultation)"
+                                <Link
+                                    :href="
+                                        route(
+                                            'consultations.show',
+                                            consultation.id
+                                        )
+                                    "
                                     class="text-white bg-cyan-700 hover:bg-cyan-800 focus:ring-4 focus:outline-none focus:ring-cyan-300 font-medium rounded-lg text-sm p-2.5 text-center inline-flex items-center me-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
                                 >
                                     <svg
@@ -170,9 +178,14 @@ const StatusConsultation = (consultation) => {
                                             y2="16.65"
                                         />
                                     </svg>
-                                </button>
+                                </Link>
 
                                 <Link
+                                    v-if="
+                                        $page.props.user['roles'] == 'supra' ||
+                                        $page.props.user['roles'] ==
+                                            'administrator'
+                                    "
                                     :href="
                                         route(
                                             'consultations.edit',
@@ -202,6 +215,11 @@ const StatusConsultation = (consultation) => {
                                 </Link>
 
                                 <button
+                                    v-if="
+                                        $page.props.user['roles'] == 'supra' ||
+                                        $page.props.user['roles'] ==
+                                            'administrator'
+                                    "
                                     @click="deleteConsultation(consultation)"
                                     class="text-white bg-cyan-700 hover:bg-cyan-800 focus:ring-4 focus:outline-none focus:ring-cyan-300 font-medium rounded-lg text-sm p-2.5 text-center inline-flex items-center me-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
                                 >

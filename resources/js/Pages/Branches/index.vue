@@ -34,7 +34,11 @@ const deleteBranch = (id) => {
             <h1 class="font-semibold text-xl text-gray-800 leading-tigh">
                 Sedes
             </h1>
-            <Link :href="route('branches.create')" class="w-full">
+            <Link
+                v-if="$page.props.user['roles'] == 'supra'"
+                :href="route('branches.create')"
+                class="w-full"
+            >
                 <svg
                     class="h-10 w-10 text-cyan-700"
                     width="24"
@@ -126,29 +130,7 @@ const deleteBranch = (id) => {
                                 class="text-center whitespace-nowrap px-4 py-2 text-gray-700"
                             >
                                 <Link
-                                    :href="route('branches.create')"
-                                    class="text-white bg-cyan-700 hover:bg-cyan-800 focus:ring-4 focus:outline-none focus:ring-cyan-300 font-medium rounded-lg text-sm p-2.5 text-center inline-flex items-center me-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-                                >
-                                    <svg
-                                        class="h-4 w-4 text-white-700"
-                                        viewBox="0 0 24 24"
-                                        fill="none"
-                                        stroke="currentColor"
-                                        stroke-width="2"
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
-                                    >
-                                        <circle cx="11" cy="11" r="8" />
-                                        <line
-                                            x1="21"
-                                            y1="21"
-                                            x2="16.65"
-                                            y2="16.65"
-                                        />
-                                    </svg>
-                                </Link>
-
-                                <Link
+                                    v-if="$page.props.user['roles'] == 'supra'"
                                     :href="route('branches.edit', branch.id)"
                                     class="text-white bg-cyan-700 hover:bg-cyan-800 focus:ring-4 focus:outline-none focus:ring-cyan-300 font-medium rounded-lg text-sm p-2.5 text-center inline-flex items-center me-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
                                 >
@@ -172,9 +154,10 @@ const deleteBranch = (id) => {
                                     <span class="sr-only">Edit</span>
                                 </Link>
 
-                                <Link
+                                <button
                                     @click="deleteBranch(branch.id)"
                                     class="text-white bg-cyan-700 hover:bg-cyan-800 focus:ring-4 focus:outline-none focus:ring-cyan-300 font-medium rounded-lg text-sm p-2.5 text-center inline-flex items-center me-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                                    v-if="$page.props.user['roles'] == 'supra'"
                                 >
                                     <svg
                                         class="h-4 w-4 text-white-700"
@@ -199,7 +182,7 @@ const deleteBranch = (id) => {
                                         />
                                     </svg>
                                     <span class="sr-only">Delete</span>
-                                </Link>
+                                </button>
                             </td>
                         </tr>
                     </tbody>

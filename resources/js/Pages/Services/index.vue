@@ -34,7 +34,11 @@ const deleteService = (id) => {
             <h1 class="font-semibold text-xl text-gray-800 leading-tigh">
                 Servicios
             </h1>
-            <Link :href="route('services.create')" class="w-full">
+            <Link
+                v-if="$page.props.user['roles'] == 'supra'"
+                :href="route('services.create')"
+                class="w-full"
+            >
                 <svg
                     class="h-10 w-10 text-cyan-700"
                     width="24"
@@ -132,6 +136,7 @@ const deleteService = (id) => {
                                 <Link
                                     :href="route('services.edit', service.id)"
                                     class="text-white bg-cyan-700 hover:bg-cyan-800 focus:ring-4 focus:outline-none focus:ring-cyan-300 font-medium rounded-lg text-sm p-2.5 text-center inline-flex items-center me-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                                    v-if="$page.props.user['roles'] == 'supra'"
                                 >
                                     <svg
                                         class="h-4 w-4 text-white-700"
@@ -153,9 +158,10 @@ const deleteService = (id) => {
                                     <span class="sr-only">Edit</span>
                                 </Link>
 
-                                <Link
+                                <button
                                     @click="deleteService(service.id)"
                                     class="text-white bg-cyan-700 hover:bg-cyan-800 focus:ring-4 focus:outline-none focus:ring-cyan-300 font-medium rounded-lg text-sm p-2.5 text-center inline-flex items-center me-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                                    v-if="$page.props.user['roles'] == 'supra'"
                                 >
                                     <svg
                                         class="h-4 w-4 text-white-700"
@@ -180,7 +186,7 @@ const deleteService = (id) => {
                                         />
                                     </svg>
                                     <span class="sr-only">Delete</span>
-                                </Link>
+                                </button>
                             </td>
                         </tr>
                     </tbody>

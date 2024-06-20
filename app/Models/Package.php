@@ -27,4 +27,15 @@ class Package extends Model
     {
         return $this->hasMany(Payment::class, 'id');
     }
+
+    public function consultation_detail():HasMany
+    {
+        return $this->hasMany(Consultation_detail::class, 'id');
+    } 
+    
+    public function payment_detail():HasMany
+    {
+        return $this->hasMany(Payment_detail::class, 'id');
+    } 
+    
 }

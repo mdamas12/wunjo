@@ -79,7 +79,7 @@ class PackageController extends Controller
     public function update(PackageRequest $request, Package $package)
     {
     
-       
+       //dd($request);
         try {
 
             if ($package->update($request->validated())){

@@ -43,7 +43,6 @@ const formPackage = useForm({
         <template #header>
             <h1 class="font-semibold text-xl text-gray-800 leading-tigh mb-3">
                 Detalle del paquete
-                {{ patient_package.date }}
             </h1>
             <Link
                 :href="route('packages.index')"
@@ -70,6 +69,10 @@ const formPackage = useForm({
             </Link>
 
             <Link
+                v-if="
+                    $page.props.user['roles'] == 'supra' ||
+                    $page.props.user['roles'] == 'administrator'
+                "
                 :href="route('packages.edit', patient_package.id)"
                 class="inline-flex items-center justify-center mx-2 text-base font-medium text-gray-600 rounded-lg bg-slate-50 hover:text-gray-900 hover:bg-slate-200 dark:text-gray-400 dark:bg-gray-800 dark:hover:bg-gray-700 dark:hover:text-white border-double border-4 border-cyan-600"
             >
@@ -96,6 +99,10 @@ const formPackage = useForm({
             </Link>
 
             <Link
+                v-if="
+                    $page.props.user['roles'] == 'supra' ||
+                    $page.props.user['roles'] == 'administrator'
+                "
                 href="#"
                 class="inline-flex items-center justify-center mx-2 text-base font-medium text-gray-600 rounded-lg bg-slate-50 hover:text-gray-900 hover:bg-slate-200 dark:text-gray-400 dark:bg-gray-800 dark:hover:bg-gray-700 dark:hover:text-white border-double border-4 border-cyan-600"
             >

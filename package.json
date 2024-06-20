@@ -22,6 +22,7 @@
     "dependencies": {
         "@inertiajs/inertia": "^0.11.1",
         "eslint": "^9.3.0",
-        "flowbite-datepicker": "^1.2.6"
+        "flowbite-datepicker": "^1.2.6",
+        "vue-notify": "^1.0.9"
     }
 }

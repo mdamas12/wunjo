@@ -35,8 +35,6 @@ const formConsultation = useForm({
     branch_id: props.consultation.branch_id,
     status_payment: props.consultation.status_payment,
     status: props.consultation.status,
-
-    branch_name: props.consultation.branch.name,
 });
 </script>
 

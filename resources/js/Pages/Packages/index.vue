@@ -58,7 +58,14 @@ const deletePackage = (package_patient) => {
                 Paquetes de Clientes
                 {{ success_message }}
             </h1>
-            <Link :href="route('packages.create')" class="w-full">
+            <Link
+                v-if="
+                    $page.props.user['roles'] == 'supra' ||
+                    $page.props.user['roles'] == 'administrator'
+                "
+                :href="route('packages.create')"
+                class="w-full"
+            >
                 <svg
                     class="h-10 w-10 text-cyan-700"
                     width="24"
@@ -163,6 +170,11 @@ const deletePackage = (package_patient) => {
                                 </Link>
 
                                 <Link
+                                    v-if="
+                                        $page.props.user['roles'] == 'supra' ||
+                                        $page.props.user['roles'] ==
+                                            'administrator'
+                                    "
                                     :href="
                                         route(
                                             'packages.edit',
@@ -192,6 +204,11 @@ const deletePackage = (package_patient) => {
                                 </Link>
 
                                 <button
+                                    v-if="
+                                        $page.props.user['roles'] == 'supra' ||
+                                        $page.props.user['roles'] ==
+                                            'administrator'
+                                    "
                                     @click="deletePackage(package_patient)"
                                     class="text-white bg-cyan-700 hover:bg-cyan-800 focus:ring-4 focus:outline-none focus:ring-cyan-300 font-medium rounded-lg text-sm p-2.5 text-center inline-flex items-center me-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
                                 >

@@ -27,7 +27,9 @@ class PackageRequest extends FormRequest
         'patient_id' => ['required'],
         'service_id' => ['required'],
         'made_quantity' => ['required'],
+        'service_name' => ['required'],
         'status' => ['required'],
+        'status_payment' => ['required'],
     ];
 }
 

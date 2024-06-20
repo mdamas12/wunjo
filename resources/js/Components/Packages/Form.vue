@@ -1,9 +1,3 @@
-<script>
-export default {
-    name: "PackagesForm",
-};
-</script>
-
 <script setup>
 import FormSection from "@/Components/FormSection.vue";
 import InputError from "@/Components/InputError.vue";
@@ -86,14 +80,28 @@ defineEmits(["submit"]);
                 <InputLabel for="patient">Servicio</InputLabel>
                 <select
                     class="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-                    id="position_id"
+                    id="servie_id"
                     v-model="form.service_id"
+                    @change="loadname()"
                 >
+                    <option
+                        v-if="updating == true"
+                        selected
+                        :value="form.service_id"
+                    >
+                        {{ form.service_name }}
+                    </option>
+
                     <option v-for="service in services" :value="service.id">
                         {{ service.name }}
                     </option>
                 </select>
-                <InputError :message="$page.props.errors.patient_id" />
+                <input
+                    v-model="form.service_name"
+                    placeholder="nombre del servicio"
+                    style="display: none"
+                />
+                <InputError :message="$page.props.errors.service_id" />
             </div>
         </template>
 
@@ -118,3 +126,24 @@ defineEmits(["submit"]);
         </template>
     </FormSection>
 </template>
+<script>
+export default {
+    name: "packageForm",
+
+    data() {
+        return {
+            service: [],
+        };
+    },
+
+    methods: {
+        loadname() {
+            //console.log(this.form.service_id);
+            for (let i = 0; i < this.services.length; i++) {
+                if (this.services[i].id == this.form.service_id)
+                    this.form.service_name = this.services[i].name;
+            }
+        },
+    },
+};
+</script>

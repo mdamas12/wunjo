@@ -16,8 +16,10 @@ return new class extends Migration
             $table->date('date');
             $table->unsignedBigInteger('patient_id')->unsigned();
             $table->unsignedBigInteger('service_id')->unsigned();
+            $table->string('service_name');
             $table->integer('made_quantity');
             $table->string('status'); // activo / culminado 
+            $table->string('status_payment');
             $table->timestamps();
 
             $table->foreign('patient_id')->references('id')->on('patients');

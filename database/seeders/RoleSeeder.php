@@ -181,46 +181,57 @@ class RoleSeeder extends Seeder
      
         $permission_read_role,
         $permission_read_clinic,
-        $permission_create_branch,
+
+        //$permission_create_branch,
         $permission_read_branch,
-        $permission_update_branch,
-        $permission_delete_branch,
-        $permission_create_service,
+        //$permission_update_branch,
+        //$permission_delete_branch,
+
+       // $permission_create_service,
         $permission_read_service,
-        $permission_update_service,
-        $permission_delete_service,
-        $permission_create_position,
+       // $permission_update_service,
+       // $permission_delete_service,
+
+       // $permission_create_position,
         $permission_read_position,
-        $permission_update_position,
-        $permission_delete_position,
+       // $permission_update_position,
+       // $permission_delete_position,
+
         $permission_create_employee,
         $permission_read_employee,
         $permission_update_employee,
         $permission_delete_employee,
+
         $permission_create_schedule,
         $permission_read_schedule,
         $permission_update_schedule,
         $permission_delete_schedule,
+
         $permission_create_patient,
         $permission_read_patient,
         $permission_update_patient,
         $permission_delete_patient,
+
         $permission_create_promotion,
         $permission_read_promotion,
         $permission_update_promotion,
         $permission_delete_promotion,
+
         $permission_create_package,
         $permission_read_package,
         $permission_update_package,
         $permission_delete_package,
+
         $permission_create_consultation,
         $permission_read_consultation,
         $permission_update_consultation,
         $permission_delete_consultation,
+
         $permission_create_method_type,
         $permission_read_method_type,
         $permission_update_method_type,
         $permission_delete_method_type,
+
         $permission_create_payment_method,
         $permission_read_payment_method,
         $permission_update_payment_method,

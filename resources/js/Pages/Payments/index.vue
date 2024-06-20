@@ -3,6 +3,7 @@ import Applayout from "@/Layouts/AppLayout.vue";
 import { useForm } from "@inertiajs/vue3";
 import { Link } from "@inertiajs/vue3";
 import { Inertia } from "@inertiajs/inertia";
+import { router } from "@inertiajs/vue3";
 
 import PackageForm from "@/Components/Packages/Form.vue";
 
@@ -65,9 +66,15 @@ const deletepayment = (payment) => {
         <template #header>
             <h1 class="font-semibold text-xl text-gray-800 leading-tigh">
                 Control de Pagos
-                {{ success_message }}
             </h1>
-            <Link :href="route('payments.create')" class="w-full">
+            <Link
+                v-if="
+                    $page.props.user['roles'] == 'supra' ||
+                    $page.props.user['roles'] == 'administrator'
+                "
+                :href="route('payments.create')"
+                class="w-full"
+            >
                 <svg
                     class="h-10 w-10 text-cyan-700"
                     width="24"
@@ -99,8 +106,7 @@ const deletepayment = (payment) => {
                         >
                             <th class="p-3 text-center">Fecha</th>
                             <th class="p-3 text-center">Paciente</th>
-                            <th class="p-3 text-center">Concepto</th>
-                            <th class="p-3 text-center">Metodo pago</th>
+                            <th class="p-3 text-center">Monto</th>
                             <th class="p-3 text-center">Status</th>
                             <th class="p-3 text-center">Acciones</th>
                         </tr>
@@ -115,7 +121,7 @@ const deletepayment = (payment) => {
                             <td
                                 class="text-center border-grey-light border hover:bg-gray-100 p-3"
                             >
-                                {{ payment.date }}
+                                {{ changeFormat(payment.date) }}
                             </td>
                             <td
                                 class="text-center border-grey-light border hover:bg-gray-100 p-3"
@@ -126,17 +132,7 @@ const deletepayment = (payment) => {
                             <td
                                 class="text-center border-grey-light border hover:bg-gray-100 p-3 truncate"
                             >
-                                {{
-                                    payment.consultation.id
-                                        ? "CONSULTA"
-                                        : "PAQUETE"
-                                }}
-                            </td>
-
-                            <td
-                                class="text-center border-grey-light border hover:bg-gray-100 p-3 truncate"
-                            >
-                                {{ payment.payment_method.name }}
+                                {{ payment.amount }}
                             </td>
 
                             <td
@@ -144,11 +140,12 @@ const deletepayment = (payment) => {
                             >
                                 {{ payment.status }}
                             </td>
+
                             <td
                                 class="text-center border-grey-light border hover:bg-gray-100 p-3 text-red-400 hover:text-red-600 hover:font-medium cursor-pointer"
                             >
-                                <Link
-                                    :href="route('payments.show', payment.id)"
+                                <button
+                                    @click="viewPayment(payment)"
                                     class="text-white bg-cyan-700 hover:bg-cyan-800 focus:ring-4 focus:outline-none focus:ring-cyan-300 font-medium rounded-lg text-sm p-2.5 text-center inline-flex items-center me-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
                                 >
                                     <svg
@@ -168,9 +165,14 @@ const deletepayment = (payment) => {
                                             y2="16.65"
                                         />
                                     </svg>
-                                </Link>
+                                </button>
 
                                 <Link
+                                    v-if="
+                                        $page.props.user['roles'] == 'supra' ||
+                                        $page.props.user['roles'] ==
+                                            'administrator'
+                                    "
                                     :href="route('payments.edit', payment.id)"
                                     class="text-white bg-cyan-700 hover:bg-cyan-800 focus:ring-4 focus:outline-none focus:ring-cyan-300 font-medium rounded-lg text-sm p-2.5 text-center inline-flex items-center me-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
                                 >
@@ -195,7 +197,12 @@ const deletepayment = (payment) => {
                                 </Link>
 
                                 <button
-                                    @click="deletePackage(payment)"
+                                    v-if="
+                                        $page.props.user['roles'] == 'supra' ||
+                                        $page.props.user['roles'] ==
+                                            'administrator'
+                                    "
+                                    @click="openDeleteModal(payment)"
                                     class="text-white bg-cyan-700 hover:bg-cyan-800 focus:ring-4 focus:outline-none focus:ring-cyan-300 font-medium rounded-lg text-sm p-2.5 text-center inline-flex items-center me-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
                                 >
                                     <svg
@@ -281,11 +288,10 @@ const deletepayment = (payment) => {
 
         <!-- Detalle del paquete -->
         <div
-            id="defaultd-modal"
+            id="view-payment-modal"
             tabindex="-1"
-            aria-hidden="true"
-            v-show="modalDetail"
-            class="overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full"
+            v-show="modalpayment"
+            class="overflow-y-auto overflow-x-auto fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full"
         >
             <div class="mx-auto relative p-4 w-full max-w-2xl max-h-full">
                 <!-- Modal content -->
@@ -299,12 +305,12 @@ const deletepayment = (payment) => {
                         <h3
                             class="text-xl font-semibold text-gray-900 dark:text-white"
                         >
-                            Informacion del Paquete
+                            Informacion del pago
                         </h3>
                         <button
                             type="button"
                             class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
-                            @click="closeDetail()"
+                            @click="closeViewModal()"
                         >
                             <svg
                                 class="w-3 h-3"
@@ -324,51 +330,244 @@ const deletepayment = (payment) => {
                             <span class="sr-only">Close modal</span>
                         </button>
                     </div>
-                    <!-- Modal body -->
 
-                    {{ datax.patient }}
-                    <div class="p-4 md:p-5 space-y-4 border-b rounded-t">
-                        <p>fecha</p>
-                        <p
-                            class="text-base leading-relaxed text-gray-500 dark:text-gray-400"
+                    <div
+                        v-if="paymentview.lenth > 0"
+                        class="grid grid grid-cols-4 gap-2 text-base leading-relaxed text-gray-500 dark:text-gray-400 p-5"
+                    >
+                        <div>
+                            <p><b>Fecha</b></p>
+                            {{ paymentview.date }}
+                        </div>
+                        <div>
+                            <p><b>Paciente</b></p>
+                            {{ paymentview.patient.fist_name }}
+                            {{ paymentview.patient.last_name }}
+                        </div>
+                        <div>
+                            <p><b>Monto</b></p>
+                            {{ paymentview.amount }}
+                        </div>
+                        <div>
+                            <p><b>Status</b></p>
+                            {{ paymentview.status }}
+                        </div>
+                    </div>
+                    <div
+                        v-if="listServicesPaid"
+                        class="grid grid grid-cols-1 gap-2 text-base leading-relaxed text-gray-500 dark:text-gray-400 p-5"
+                    >
+                        <h1>Lista de Servicios:</h1>
+                        <table
+                            class="w-full flex flex-row flex-no-wrap sm:bg-white rounded-lg overflow-hidden sm:shadow-lg my-5"
                         >
-                            {{ datax.date }}
-                        </p>
-                    </div>
-                    <div class="p-4 md:p-5 space-y-4 border-b rounded-t">
-                        <p>Paciente</p>
-                        {{ datax.patient }}
+                            <thead>
+                                <tr
+                                    class="bg-cyan-600 flex flex-col flex-no wrap sm:table-row rounded-l-lg sm:rounded-none mb-2 sm:mb-0"
+                                >
+                                    <th class="p-3 text-center text-white">
+                                        Fecha
+                                    </th>
+                                    <th class="p-3 text-center text-white">
+                                        Tipo
+                                    </th>
+                                    <th class="p-3 text-center text-white">
+                                        Asignado A
+                                    </th>
+                                    <th class="p-3 text-center text-white">
+                                        Monto
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody
+                                v-for="servicePaid in listServicesPaid"
+                                class="flex-1 sm:flex-none"
+                            >
+                                <tr
+                                    class="flex flex-col flex-no wrap sm:table-row mb-2 sm:mb-0"
+                                >
+                                    <td
+                                        class="text-center border-grey-light border p-3"
+                                    >
+                                        {{
+                                            servicePaid.consultation_id
+                                                ? servicePaid.consultation.date
+                                                : servicePaid.package.date
+                                        }}
+                                    </td>
+                                    <td
+                                        class="text-center border-grey-light border p-3"
+                                    >
+                                        {{
+                                            servicePaid.consultation_id
+                                                ? "Consulta"
+                                                : servicePaid.package
+                                                      .service_name
+                                        }}
+                                    </td>
+                                    <td
+                                        class="text-center border-grey-light border p-3"
+                                    >
+                                        {{
+                                            servicePaid.consultation_id
+                                                ? servicePaid.consultation
+                                                      .employee_id
+                                                : "--"
+                                        }}
+                                    </td>
 
-                        <p
-                            class="text-base leading-relaxed text-gray-500 dark:text-gray-400"
-                        ></p>
+                                    <td
+                                        class="text-center border-grey-light border p-3"
+                                    >
+                                        {{
+                                            servicePaid.consultation_id
+                                                ? servicePaid.consultation
+                                                      .amount
+                                                : servicePaid.package
+                                                      .amount_paid
+                                        }}
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
                     </div>
-
-                    <div class="p-4 md:p-5 space-y-4 border-b rounded-t">
-                        <h3>Paquete</h3>
-                        <p
-                            class="text-base leading-relaxed text-gray-500 dark:text-gray-400"
-                        ></p>
-                    </div>
-
-                    <div class="p-4 md:p-5 space-y-4 border-b rounded-t">
-                        <h3>Sesiones Realizadas</h3>
-                        <p
-                            class="text-base leading-relaxed text-gray-500 dark:text-gray-400"
+                    <!---->
+                    <div
+                        v-if="paymentsList"
+                        class="grid grid grid-cols-1 gap-2 text-base leading-relaxed text-gray-500 dark:text-gray-400 p-5"
+                    >
+                        <h1>Resumen de pago:</h1>
+                        <table
+                            class="w-full flex flex-row flex-no-wrap sm:bg-white rounded-lg overflow-hidden sm:shadow-lg my-5"
                         >
-                            {{ datax.made_quantity }}
-                        </p>
-                    </div>
+                            <thead>
+                                <tr
+                                    class="bg-cyan-600 flex flex-col flex-no wrap sm:table-row rounded-l-lg sm:rounded-none mb-2 sm:mb-0"
+                                >
+                                    <th class="p-3 text-center text-white">
+                                        Metodo de pago
+                                    </th>
+                                    <th class="p-3 text-center text-white">
+                                        Monto
+                                    </th>
+                                    <th class="p-3 text-center text-white">
+                                        Referencia
+                                    </th>
+                                    <th class="p-3 text-center text-white">
+                                        Comprobante
+                                    </th>
+                                    <th class="p-3 text-center text-white">
+                                        Comprobante
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody
+                                v-for="paymentsCheck in paymentsList"
+                                class="flex-1 sm:flex-none"
+                            >
+                                <tr
+                                    class="flex flex-col flex-no wrap sm:table-row mb-2 sm:mb-0"
+                                >
+                                    <td
+                                        class="text-center border-grey-light border p-3"
+                                    >
+                                        {{ paymentsCheck.payment_method.name }}
+                                        |
+                                        {{ paymentsCheck.payment_method.bank }}
+                                    </td>
+                                    <td
+                                        class="text-center border-grey-light border p-3"
+                                    >
+                                        {{ paymentsCheck.parcial_amount }}
+                                    </td>
+                                    <td
+                                        class="text-center border-grey-light border p-3"
+                                    >
+                                        {{ paymentsCheck.reference }}
+                                    </td>
 
-                    <div class="p-4 md:p-5 space-y-4 border-b rounded-t">
-                        <h3>Status</h3>
-                        <p
-                            class="text-base leading-relaxed text-gray-500 dark:text-gray-400"
-                        >
-                            {{ datax.status }}
-                        </p>
+                                    <td
+                                        class="text-center border-grey-light border p-3"
+                                    >
+                                        {{
+                                            paymentsCheck.url_capture
+                                                ? paymentsCheck.url_capture
+                                                : "S/C"
+                                        }}
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
                     </div>
-                    <!-- Modal footer -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Main modal -->
+        <div
+            id="deleteModal"
+            tabindex="-1"
+            v-show="deleteModal"
+            class="overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-modal md:h-full"
+        >
+            <div class="relative p-4 w-full max-w-md h-full md:h-auto">
+                <!-- Modal content -->
+                <div
+                    class="relative p-4 text-center bg-white rounded-lg shadow dark:bg-gray-800 sm:p-5"
+                >
+                    <button
+                        type="button"
+                        class="text-gray-400 absolute top-2.5 right-2.5 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white"
+                        data-modal-toggle="deleteModal"
+                        @click="closeDeleteModal()"
+                    >
+                        <svg
+                            aria-hidden="true"
+                            class="w-5 h-5"
+                            fill="currentColor"
+                            viewBox="0 0 20 20"
+                            xmlns="http://www.w3.org/2000/svg"
+                        >
+                            <path
+                                fill-rule="evenodd"
+                                d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                                clip-rule="evenodd"
+                            ></path>
+                        </svg>
+                        <span class="sr-only">Close modal</span>
+                    </button>
+                    <svg
+                        class="text-gray-400 dark:text-gray-500 w-11 h-11 mb-3.5 mx-auto"
+                        aria-hidden="true"
+                        fill="currentColor"
+                        viewBox="0 0 20 20"
+                        xmlns="http://www.w3.org/2000/svg"
+                    >
+                        <path
+                            fill-rule="evenodd"
+                            d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z"
+                            clip-rule="evenodd"
+                        ></path>
+                    </svg>
+                    <p class="mb-4 text-gray-500 dark:text-gray-300">
+                        ¿Estas seguro de eliminar este pago?
+                    </p>
+                    <div class="flex justify-center items-center space-x-4">
+                        <button
+                            @click="closeDeleteModal()"
+                            data-modal-toggle="deleteModal"
+                            type="button"
+                            class="py-2 px-3 text-sm font-medium text-gray-500 bg-white rounded-lg border border-gray-200 hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-primary-300 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600"
+                        >
+                            No, cancelar
+                        </button>
+                        <button
+                            @click="deletePayment(dataPayment)"
+                            class="py-2 px-3 text-sm font-medium text-center text-white bg-red-600 rounded-lg hover:bg-red-700 focus:ring-4 focus:outline-none focus:ring-red-300 dark:bg-red-500 dark:hover:bg-red-600 dark:focus:ring-red-900"
+                        >
+                            Si, Eliminar Pago.
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -383,9 +582,14 @@ export default {
 
     data() {
         return {
-            modalDetail: false,
-            datax: [],
+            modalpayment: false,
+
+            deleteModal: false,
+            dataPayment: [],
+            paymentview: [],
             position_name: "",
+            listServicesPaid: [],
+            paymentsList: [],
         };
     },
 
@@ -403,9 +607,66 @@ export default {
             return;
         },
 
-        closeDetail() {
-            this.modalDetail = false;
+        closeViewModal() {
+            this.modalpayment = false;
             return;
+        },
+        changeFormat(date) {
+            let newdate = date.split("-");
+            //console.log(date);
+            return newdate[2] + "/" + newdate[1] + "/" + newdate[0];
+        },
+
+        viewPayment(payment) {
+            this.paymentview = payment;
+            router.visit("payments/servicespayment", {
+                method: "post",
+                data: {
+                    payment_id: payment,
+                },
+                preserveState: true,
+                preserveScroll: true,
+                onSuccess: (resp) => {
+                    this.listServicesPaid =
+                        resp.props.jetstream.flash.serviceslistpayment;
+                    //console.log(this.listServicesPaid);
+                    this.paymentsList =
+                        resp.props.jetstream.flash.paymentDetailList;
+                },
+                onError: (errors) => {
+                    console.log("erros");
+                },
+            });
+            //console.log(this.listServicesPaid.lenth);
+            this.modalpayment = true;
+            return;
+        },
+        openDeleteModal(payment) {
+            this.dataPayment = payment;
+            this.deleteModal = true;
+        },
+        closeDeleteModal() {
+            this.deleteModal = false;
+        },
+        deletePayment(payment) {
+            router.visit("payments/deletepayment", {
+                method: "post",
+                data: {
+                    payment_id: payment.id,
+                    payment_amount: payment.amount,
+                    services: this.listServicesPaid,
+                    payments: this.paymentsList,
+                },
+                preserveState: true,
+                preserveScroll: true,
+                onSuccess: (resp) => {
+                    this.deleteModal = false;
+                    alert(resp.props.jetstream.flash.message);
+                },
+                onError: (errors) => {
+                    console.log("erros");
+                },
+            });
         },
     },
 };

@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use \Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Payment extends Model
 {
@@ -37,4 +38,14 @@ class Payment extends Model
      {
          return $this->BelongsTo(Package::class);
      }
+
+     public function payment_detail():HasMany
+     {
+         return $this->hasMany(Payment_detail::class, 'id');
+     } 
+
+     public function payment_check():HasMany
+     {
+         return $this->hasMany(Payment_check::class, 'id');
+     } 
 }

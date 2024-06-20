@@ -26,9 +26,11 @@ const props = defineProps({
 const formPackage = useForm({
     patient_id: props.patient_package.patient_id,
     service_id: props.patient_package.service_id,
+    service_name: props.patient_package.service_name,
     made_quantity: props.patient_package.made_quantity,
     date: props.patient_package.date,
     status: props.patient_package.status,
+    status_payment: props.patient_package.status_payment,
 });
 </script>
 

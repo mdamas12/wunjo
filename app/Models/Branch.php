@@ -14,10 +14,15 @@ class Branch extends Model
     /**
      * Get all of the comments for the Position
      *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany  
      */
     public function consultation():HasMany
     {
         return $this->hasMany(Consultation::class, 'id');
-    } 
+    }  
+
+    public function userbranch():HasMany
+    {
+        return $this->hasMany(Userbranch::class, 'id');
+    }  
 }

@@ -15,18 +15,11 @@ return new class extends Migration
             $table->id();
             $table->date('date');
             $table->unsignedBigInteger('patient_id')->unsigned();
-            $table->unsignedBigInteger('payment_method_id')->unsigned();
-            $table->unsignedBigInteger('consultation_id')->unsigned()->nullable();
-            $table->unsignedBigInteger('package_id')->unsigned()->nullable();
             $table->float('amount');
-            $table->string('reference'); 
             $table->string('status'); // por cancelar - pagada - pago parcial  
             $table->timestamps();
 
             $table->foreign('patient_id')->references('id')->on('patients');
-            $table->foreign('payment_method_id')->references('id')->on('method_types');
-            $table->foreign('consultation_id')->references('id')->on('consultations');
-            $table->foreign('package_id')->references('id')->on('packages');
         });
     }
 

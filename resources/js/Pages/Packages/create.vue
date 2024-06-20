@@ -21,9 +21,11 @@ defineProps({
 const form = useForm({
     patient_id: "",
     service_id: "",
+    service_name: "",
     made_quantity: 0,
     date: "",
-    status: "PENDIENTE",
+    status: "ACTIVO",
+    status_payment: "PENDIENTE",
 });
 </script>
 

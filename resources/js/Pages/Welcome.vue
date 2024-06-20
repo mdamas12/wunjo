@@ -9,11 +9,15 @@ defineProps({
     },
     laravelVersion: {
         type: String,
-        required: true,
+        required: false,
     },
     phpVersion: {
         type: String,
-        required: true,
+        required: false,
+    },
+    consultations: {
+        type: Object,
+        required: false,
     },
 });
 
@@ -56,7 +60,7 @@ function handleImageError() {
                             >
                                 Iniciar Sesion
                             </Link>
-                            <!--
+
                             <Link
                                 v-if="canRegister"
                                 :href="route('register')"
@@ -64,7 +68,6 @@ function handleImageError() {
                             >
                                 Register
                             </Link>
-                        -->
                         </template>
                     </nav>
                 </header>

@@ -21,8 +21,22 @@ class PaymentRequest extends FormRequest
      */
     public function rules(): array
     {
-        return [
-            //
+        
+            return [
+                'date' => ['required'],     
+                'patient_id' => ['required'],   
+                'amount' => ['required'],  
+                'status' => ['nullable'],         
+            ];
+        
+    }
+
+    public function messages():array{
+
+        return[
+           //'detail_band.required' => __('Debes seleccionar alguna consulta pendiente por pago para continuar'),
+           
         ];
+
     }
 }
