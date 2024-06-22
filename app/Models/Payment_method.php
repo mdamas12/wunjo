@@ -32,6 +32,11 @@ class Payment_method extends Model
     {
         return $this->hasMany(Payment_check::class, 'id');
     } 
+
+    public function payroll_pay():HasMany
+    {
+        return $this->hasMany(Payroll_pay::class, 'id');
+    } 
      
     
 }

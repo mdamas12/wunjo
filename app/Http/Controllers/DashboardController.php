@@ -19,14 +19,15 @@ use Illuminate\Http\Request;
 class DashboardController extends Controller
 {
     public function index (){
-
+       
      
        if (auth()->user() == null){
           return Inertia::render('Auth/Login');
        }
 
-       $date = Carbon::now();
+      /* $date = Carbon::now();
        $today = $date->toDateString();
+      
        $consultations = Consultation::with('branch','patient','employee')
             ->where('status','<>','DELETED')
             ->where('status','<>','REALIZADA')
@@ -39,12 +40,12 @@ class DashboardController extends Controller
             ->where('status_payment','=','PENDIENTE')
             ->get();
 
-  
+        */
         return Inertia::render('Dashboard', [ 
-            'ConsultationsPending' => $consultations,
-            'PaymentPending' => $pendinglist,
+            //'ConsultationsPending' => $consultations,
+            //'PaymentPending' => $pendinglist,
             'canLogin' => Route::has('login'),
-            //'canRegister' => Route::has('register'),
+            'canRegister' => Route::has('register'),
            'laravelVersion' => Application::VERSION,
             'phpVersion' => PHP_VERSION,
         ]);

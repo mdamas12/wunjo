@@ -20,6 +20,7 @@ return new class extends Migration
             $table->integer('made_quantity');
             $table->string('status'); // activo / culminado 
             $table->string('status_payment');
+            $table->boolean('status_payroll');
             $table->timestamps();
 
             $table->foreign('patient_id')->references('id')->on('patients');

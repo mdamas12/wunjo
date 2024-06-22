@@ -35,10 +35,8 @@ defineProps({
 </script>
 
 <template>
-    {{ userRole }}
-    {{ userSede }}
     <div
-        class="grid grid lg:grid-cols-1 md:grid-cols-1 sm:grid-cols-1 gap-2 p-5"
+        class="grid grid lg:grid-cols-2 md:grid-cols-2 sm:grid-cols-1 gap-2 p-5"
     >
         <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg px-10">
             <div class="bg-white border-b border-gray-200">
@@ -66,7 +64,7 @@ defineProps({
                         </tr>
                     </thead>
                     <tbody
-                        v-for="consultation in ConsultationsPending"
+                        v-for="consultation in consultations"
                         class="flex-1 sm:flex-none"
                     >
                         <tr
@@ -131,7 +129,7 @@ defineProps({
                         </tr>
                     </thead>
                     <tbody
-                        v-for="consultation in PaymentPending"
+                        v-for="consultation in pendinglist"
                         class="flex-1 sm:flex-none text-center"
                     >
                         <tr
@@ -198,13 +196,15 @@ export default {
     async mounted() {
         this.userRole = this.$page.props.auth.user.roles[0].name;
         this.userSede = this.$page.props.auth.user.id;
-        /*  router.visit("consultations/loadlist", {
+        router.visit("consultations/loadlist", {
             method: "post",
             preserveState: true,
             preserveScroll: true,
             onSuccess: (resp) => {
                 this.consultations =
                     resp.props.jetstream.flash.ConsultationsList;
+
+                //console.log(this.consultations);
                 if (this.consultations.length == 0) {
                     this.msg_consultList =
                         "No hay consultas registradas para el dia de hoy";
@@ -230,7 +230,7 @@ export default {
             onError: (errors) => {
                 console.log("erros");
             },
-        }); */
+        });
     },
 
     methods: {

@@ -31,7 +31,7 @@ const formConsultation = useForm({
             </h1>
             <Link
                 :href="route('consultations.index')"
-                class="inline-flex items-center justify-center mx-2 text-base font-medium text-gray-600 rounded-lg bg-slate-50 hover:text-gray-900 hover:bg-slate-200 dark:text-gray-400 dark:bg-gray-800 dark:hover:bg-gray-700 dark:hover:text-white border-double border-4 border-cyan-600"
+                class="inline-flex items-center justify-center mx-2 text-base font-medium text-gray-600 rounded-lg bg-slate-50 hover:text-gray-900 hover:bg-slate-200 dark:text-gray-400 dark:bg-gray-800 dark:hover:bg-gray-700 dark:hover:text-white border-2 border-cyan-600"
             >
                 <svg
                     class="h-8 w-8 text-cyan-600"
@@ -52,211 +52,195 @@ const formConsultation = useForm({
                 </svg>
                 <span class="w-full">Volver</span>
             </Link>
-
-            <Link
-                v-if="
-                    $page.props.user['roles'] == 'supra' ||
-                    $page.props.user['roles'] == 'administrator'
-                "
-                :href="route('consultations.edit', consultation.id)"
-                class="inline-flex items-center justify-center mx-2 text-base font-medium text-gray-600 rounded-lg bg-slate-50 hover:text-gray-900 hover:bg-slate-200 dark:text-gray-400 dark:bg-gray-800 dark:hover:bg-gray-700 dark:hover:text-white border-double border-4 border-cyan-600"
-            >
-                <svg
-                    class="h-8 w-8 text-cyan-600"
-                    width="24"
-                    height="24"
-                    viewBox="0 0 24 24"
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="2"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                >
-                    <path
-                        d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"
-                    />
-                    <path
-                        d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"
-                    />
-                </svg>
-                <span class="w-full">Editar</span>
-            </Link>
-
-            <button
-                @click="addDetail(consultation)"
-                class="inline-flex items-center justify-center mx-2 text-base font-medium text-gray-600 rounded-lg bg-slate-50 hover:text-gray-900 hover:bg-slate-200 dark:text-gray-400 dark:bg-gray-800 dark:hover:bg-gray-700 dark:hover:text-white border-double border-4 border-cyan-600"
-            >
-                <svg
-                    class="h-8 w-8 text-cyan-600"
-                    width="24"
-                    height="24"
-                    viewBox="0 0 24 24"
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="2"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                >
-                    <path
-                        d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"
-                    />
-                    <path
-                        d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"
-                    />
-                </svg>
-                <span class="w-full">Agregar Detalle</span>
-            </button>
-
-            <button
-                v-if="$page.props.user['roles'] == 'employee'"
-                @click="addevaluation(consultation)"
-                class="inline-flex items-center justify-center mx-2 text-base font-medium text-gray-600 rounded-lg bg-slate-50 hover:text-gray-900 hover:bg-slate-200 dark:text-gray-400 dark:bg-gray-800 dark:hover:bg-gray-700 dark:hover:text-white border-double border-4 border-cyan-600"
-            >
-                <svg
-                    class="h-8 w-8 text-cyan-600"
-                    width="24"
-                    height="24"
-                    viewBox="0 0 24 24"
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="2"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                >
-                    <path
-                        d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"
-                    />
-                    <path
-                        d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"
-                    />
-                </svg>
-                <span class="w-full">Evaluación</span>
-            </button>
-
-            <button
-                @click="addDiagnostico(consultation)"
-                v-if="$page.props.user['roles'] == 'employee'"
-                class="inline-flex items-center justify-center mx-2 text-base font-medium text-gray-600 rounded-lg bg-slate-50 hover:text-gray-900 hover:bg-slate-200 dark:text-gray-400 dark:bg-gray-800 dark:hover:bg-gray-700 dark:hover:text-white border-double border-4 border-cyan-600"
-            >
-                <svg
-                    class="h-8 w-8 text-cyan-600"
-                    width="24"
-                    height="24"
-                    viewBox="0 0 24 24"
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="2"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                >
-                    <path
-                        d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"
-                    />
-                    <path
-                        d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"
-                    />
-                </svg>
-                <span class="w-full">Diagnostico</span>
-            </button>
-
-            <Link
-                v-if="
-                    $page.props.user['roles'] == 'supra' ||
-                    $page.props.user['roles'] == 'administrator'
-                "
-                href="#"
-                class="inline-flex items-center justify-center mx-2 text-base font-medium text-gray-600 rounded-lg bg-slate-50 hover:text-gray-900 hover:bg-slate-200 dark:text-gray-400 dark:bg-gray-800 dark:hover:bg-gray-700 dark:hover:text-white border-double border-4 border-cyan-600"
-            >
-                <svg
-                    class="h-8 w-8 text-cyan-600"
-                    width="24"
-                    height="24"
-                    viewBox="0 0 24 24"
-                    stroke-width="2"
-                    stroke="currentColor"
-                    fill="none"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                >
-                    <path stroke="none" d="M0 0h24v24H0z" />
-                    <rect x="3" y="5" width="18" height="14" rx="3" />
-                    <line x1="3" y1="10" x2="21" y2="10" />
-                    <line x1="7" y1="15" x2="7.01" y2="15" />
-                    <line x1="11" y1="15" x2="13" y2="15" />
-                </svg>
-                <span class="w-full">Pagar</span>
-            </Link>
         </template>
         <!-- Main Add Branch -->
         <div class="w-[80%] mx-auto rounded-lg border border-gray-200 p-5 m-5">
+            <div class="grid grid-cols-3 border-b">
+                <div class="flex pl-0 mt-3 space-x-1 sm:pl-2 sm:mt-0">
+                    <Link
+                        v-if="
+                            $page.props.user['roles'] == 'supra' ||
+                            $page.props.user['roles'] == 'administrator'
+                        "
+                        :href="route('consultations.edit', consultation.id)"
+                        class="inline-flex justify-center p-1 text-gray-500 rounded cursor-pointer hover:text-gray-900 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+                    >
+                        <svg
+                            class="h-8 w-8 text-gray-600"
+                            viewBox="0 0 24 24"
+                            stroke-width="2"
+                            stroke="currentColor"
+                            fill="none"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                        >
+                            <path stroke="none" d="M0 0h24v24H0z" />
+                            <path
+                                d="M9 7 h-3a2 2 0 0 0 -2 2v9a2 2 0 0 0 2 2h9a2 2 0 0 0 2 -2v-3"
+                            />
+                            <path
+                                d="M9 15h3l8.5 -8.5a1.5 1.5 0 0 0 -3 -3l-8.5 8.5v3"
+                            />
+                            <line x1="16" y1="5" x2="19" y2="8" />
+                        </svg>
+
+                        <span class="w-full items-center my-1">Editar</span>
+                    </Link>
+                    <button
+                        @click="addDetail(consultation)"
+                        class="inline-flex justify-center p-1 text-gray-500 rounded cursor-pointer hover:text-gray-900 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+                    >
+                        <svg
+                            class="h-8 w-8 text-gray-600"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke="currentColor"
+                        >
+                            <path
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                stroke-width="2"
+                                d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"
+                            />
+                        </svg>
+                        <span class="w-full items-center my-1">Detalles</span>
+                    </button>
+                    <button
+                        v-if="
+                            $page.props.user['roles'] == 'supra' ||
+                            $page.props.user['roles'] == 'employee'
+                        "
+                        @click="addevaluation(consultation)"
+                        class="inline-flex justify-center p-1 text-gray-500 rounded cursor-pointer hover:text-gray-900 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+                    >
+                        <svg
+                            class="h-8 w-8 text-gray-600"
+                            width="24"
+                            height="24"
+                            viewBox="0 0 24 24"
+                            stroke-width="2"
+                            stroke="currentColor"
+                            fill="none"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                        >
+                            <path stroke="none" d="M0 0h24v24H0z" />
+                            <circle cx="9" cy="7" r="4" />
+                            <path
+                                d="M3 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2"
+                            />
+                            <line x1="19" y1="7" x2="19" y2="10" />
+                            <line x1="19" y1="14" x2="19" y2="14.01" />
+                        </svg>
+                        <span class="w-full items-center my-1">Evaluación</span>
+                    </button>
+                    <button
+                        v-if="
+                            $page.props.user['roles'] == 'supra' ||
+                            $page.props.user['roles'] == 'administrator'
+                        "
+                        @click="deletemsg()"
+                        class="inline-flex justify-center p-1 text-gray-500 rounded cursor-pointer hover:text-gray-900 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+                    >
+                        <svg
+                            class="h-8 w-8 text-gray-600"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke="currentColor"
+                        >
+                            <path
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                stroke-width="2"
+                                d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                            />
+                        </svg>
+                        <span class="w-full items-center my-1">Eliminar</span>
+                    </button>
+
+                    <a
+                        href="#"
+                        class="inline-flex justify-center p-1 text-gray-500 rounded cursor-pointer hover:text-gray-900 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+                    >
+                        <svg
+                            class="w-6 h-6"
+                            fill="currentColor"
+                            viewBox="0 0 20 20"
+                            xmlns="http://www.w3.org/2000/svg"
+                        >
+                            <path
+                                d="M10 6a2 2 0 110-4 2 2 0 010 4zM10 12a2 2 0 110-4 2 2 0 010 4zM10 18a2 2 0 110-4 2 2 0 010 4z"
+                            ></path>
+                        </svg>
+                    </a>
+                </div>
+            </div>
             <div class="">
-                <!--  content -->
-                <div class="p-4 md:p-5 space-y-4 border-b rounded-t">
-                    <h3>Paciente</h3>
+                <div class="grid grid-cols-3 my-5">
+                    <!--  content -->
+                    <div class="p-4 md:p-5 border-b rounded-t">
+                        <h3>Paciente</h3>
 
-                    <p
-                        class="text-base leading-relaxed text-gray-500 dark:text-gray-400"
-                    >
-                        {{ consultation.patient.fist_name }}
-                        {{ consultation.patient.last_name }}
-                    </p>
+                        <p class="text-base text-gray-500 dark:text-gray-400">
+                            {{ consultation.patient.fist_name }}
+                            {{ consultation.patient.last_name }}
+                        </p>
+                    </div>
+                    <div class="p-4 md:p-5 border-b rounded-t">
+                        <h3>Fecha</h3>
+                        <p class="text-base text-gray-500 dark:text-gray-400">
+                            {{ consultation.date }}
+                        </p>
+                    </div>
+                    <div class="p-4 md:p-5 border-b rounded-t">
+                        <h3>Hora</h3>
+                        <p class="text-base text-gray-500 dark:text-gray-400">
+                            {{ consultation.hour }}
+                        </p>
+                    </div>
                 </div>
-                <div class="p-4 md:p-5 space-y-4 border-b rounded-t">
-                    <h3>Fecha</h3>
-                    <p
-                        class="text-base leading-relaxed text-gray-500 dark:text-gray-400"
-                    >
-                        {{ consultation.date }}
-                    </p>
-                </div>
-                <div class="p-4 md:p-5 space-y-4 border-b rounded-t">
-                    <h3>Hora</h3>
-                    <p
-                        class="text-base leading-relaxed text-gray-500 dark:text-gray-400"
-                    >
-                        {{ consultation.hour }}
-                    </p>
-                </div>
+                <div class="grid grid-cols-3 my-5">
+                    <div class="p-4 md:p-5 space-y-4 border-b rounded-t">
+                        <h3>Asiganado A:</h3>
+                        <p
+                            class="text-base leading-relaxed text-gray-500 dark:text-gray-400"
+                        >
+                            {{ consultation.employee.fist_name }}
+                            {{ consultation.employee.last_name }}
+                        </p>
+                    </div>
 
-                <div class="p-4 md:p-5 space-y-4 border-b rounded-t">
-                    <h3>Asiganado A:</h3>
-                    <p
-                        class="text-base leading-relaxed text-gray-500 dark:text-gray-400"
-                    >
-                        {{ consultation.employee.fist_name }}
-                        {{ consultation.employee.last_name }}
-                    </p>
+                    <div class="p-4 md:p-5 space-y-4 border-b rounded-t">
+                        <h3>Status de consulta</h3>
+                        <p
+                            class="text-base leading-relaxed text-gray-500 dark:text-gray-400"
+                        >
+                            {{ consultation.status }}
+                        </p>
+                    </div>
                 </div>
+                <div class="grid grid-cols-2 my-5">
+                    <div class="p-4 md:p-5 space-y-4 border-b rounded-t">
+                        <h3>Monto Total</h3>
+                        <p
+                            class="text-base leading-relaxed text-gray-500 dark:text-gray-400"
+                        >
+                            {{ consultation.amount }}
+                        </p>
+                    </div>
 
-                <div class="p-4 md:p-5 space-y-4 border-b rounded-t">
-                    <h3>Monto Total</h3>
-                    <p
-                        class="text-base leading-relaxed text-gray-500 dark:text-gray-400"
-                    >
-                        {{ consultation.amount }}
-                    </p>
-                </div>
-
-                <div class="p-4 md:p-5 space-y-4 border-b rounded-t">
-                    <h3>Status de consulta</h3>
-                    <p
-                        class="text-base leading-relaxed text-gray-500 dark:text-gray-400"
-                    >
-                        {{ consultation.status }}
-                    </p>
-                </div>
-
-                <div class="p-4 md:p-5 space-y-4 border-b rounded-t">
-                    <h3>Status de pago</h3>
-                    <p
-                        class="text-base leading-relaxed text-gray-500 dark:text-gray-400"
-                    >
-                        {{ consultation.status_payment }}
-                    </p>
+                    <div class="p-4 md:p-5 space-y-4 border-b rounded-t">
+                        <h3>Status de pago</h3>
+                        <p
+                            class="text-base leading-relaxed text-gray-500 dark:text-gray-400"
+                        >
+                            {{
+                                consultation.status_payment == "PAID"
+                                    ? "PAGADA"
+                                    : consultation.status_payment
+                            }}
+                        </p>
+                    </div>
                 </div>
             </div>
 
@@ -568,6 +552,12 @@ export default {
 
         closeDetail() {
             this.addDetailShow = false;
+        },
+
+        deletemsg() {
+            alert(
+                "Por seguridad, puedes eliminar la consulta desde la lista principal"
+            );
         },
 
         saveDetail(consultation, detail_type, detail_id) {

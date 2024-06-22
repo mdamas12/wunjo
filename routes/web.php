@@ -12,8 +12,8 @@ use App\Http\Controllers\PatientController;
 use App\Http\Controllers\ConsultationController;
 use App\Http\Controllers\PackageController;
 use App\Http\Controllers\PaymentController;
-use App\Http\Controllers\UserController;
-
+use App\Http\Controllers\UserController; 
+use App\Http\Controllers\PayrollController;
 
 //No auth Routes
 Route::get('/', [DashboardController::class, 'index']);
@@ -42,7 +42,8 @@ Route::middleware([
 });
 
 
- 
+
+Route::post('/payrolls/searchworked', [PayrollController::class, 'searchworked'])->name('searchworked');
 Route::post('/users/seacrchroleuser', [UserController::class, 'seacrchroleuser'])->name('seacrchroleuser'); 
 Route::post('/consultations/loadlist', [ConsultationController::class, 'loadlist'])->name('loadlist'); 
 Route::post('/consultations/pendingpay', [ConsultationController::class, 'pendingPay'])->name('pendingpay'); 

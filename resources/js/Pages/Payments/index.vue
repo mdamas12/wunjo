@@ -144,8 +144,8 @@ const deletepayment = (payment) => {
                             <td
                                 class="text-center border-grey-light border hover:bg-gray-100 p-3 text-red-400 hover:text-red-600 hover:font-medium cursor-pointer"
                             >
-                                <button
-                                    @click="viewPayment(payment)"
+                                <Link
+                                    :href="route('payments.show', payment.id)"
                                     class="text-white bg-cyan-700 hover:bg-cyan-800 focus:ring-4 focus:outline-none focus:ring-cyan-300 font-medium rounded-lg text-sm p-2.5 text-center inline-flex items-center me-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
                                 >
                                     <svg
@@ -165,8 +165,8 @@ const deletepayment = (payment) => {
                                             y2="16.65"
                                         />
                                     </svg>
-                                </button>
-
+                                </Link>
+                                <!--
                                 <Link
                                     v-if="
                                         $page.props.user['roles'] == 'supra' ||
@@ -195,7 +195,7 @@ const deletepayment = (payment) => {
                                     </svg>
                                     <span class="sr-only">Edit</span>
                                 </Link>
-
+-->
                                 <button
                                     v-if="
                                         $page.props.user['roles'] == 'supra' ||

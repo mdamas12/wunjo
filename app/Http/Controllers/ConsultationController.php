@@ -207,6 +207,8 @@ class ConsultationController extends Controller
         }
         else{
             $amount =  $consultation->amount; 
+            $consultation->haspackage = true;
+            $consultation->update();
         }
         session()->flash('flash.amount', $amount);
          return redirect()->back();

@@ -20,8 +20,12 @@ return new class extends Migration
            // $table->string('reason',50); //motivo de la consulta
             $table->date('date');
             $table->time('hour');
+            $table->float('amount');
+            $table->float('amount_paid');
+            $table->boolean('haspackage');
             $table->string('status'); //Pendiente / Realizada.
             $table->string('status_payment'); //por cancelar - pago parcial - pagada - paquete.
+            $table->boolean('status_payroll'); 
             $table->timestamps();
 
            // $table->foreign('schedule_id')->references('id')->on('schedules');

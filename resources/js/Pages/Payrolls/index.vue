@@ -8,11 +8,7 @@ import { router } from "@inertiajs/vue3";
 import PackageForm from "@/Components/Packages/Form.vue";
 
 defineProps({
-    success_message: {
-        type: String,
-        required: false,
-    },
-    payments: {
+    payrolls: {
         type: Object,
         required: true,
     },
@@ -76,21 +72,16 @@ const deletepayment = (payment) => {
                 class="w-full"
             >
                 <svg
-                    class="h-10 w-10 text-cyan-700"
-                    width="24"
-                    height="24"
-                    viewBox="0 0 24 24"
-                    stroke-width="2"
-                    stroke="currentColor"
+                    class="h-8 w-8 text-cyan-700"
                     fill="none"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
                 >
-                    <path stroke="none" d="M0 0h24v24H0z" />
-                    <line x1="9" y1="12" x2="15" y2="12" />
-                    <line x1="12" y1="9" x2="12" y2="15" />
                     <path
-                        d="M4 6v-1a1 1 0 0 1 1 -1h1m5 0h2m5 0h1a1 1 0 0 1 1 1v1m0 5v2m0 5v1a1 1 0 0 1 -1 1h-1m-5 0h-2m-5 0h-1a1 1 0 0 1 -1 -1v-1m0 -5v-2m0 -5"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M17 14v6m-3-3h6M6 10h2a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v2a2 2 0 002 2zm10 0h2a2 2 0 002-2V6a2 2 0 00-2-2h-2a2 2 0 00-2 2v2a2 2 0 002 2zM6 20h2a2 2 0 002-2v-2a2 2 0 00-2-2H6a2 2 0 00-2 2v2a2 2 0 002 2z"
                     />
                 </svg>
             </Link>
@@ -106,13 +97,13 @@ const deletepayment = (payment) => {
                         >
                             <th class="p-3 text-center">Fecha</th>
                             <th class="p-3 text-center">empleado</th>
+                            <th class="p-3 text-center">Concepto</th>
                             <th class="p-3 text-center">Monto</th>
-                            <th class="p-3 text-center">Status</th>
                             <th class="p-3 text-center">Acciones</th>
                         </tr>
                     </thead>
                     <tbody
-                        v-for="payment in payments.data"
+                        v-for="payroll in payrolls.data"
                         class="flex-1 sm:flex-none"
                     >
                         <tr
@@ -121,31 +112,31 @@ const deletepayment = (payment) => {
                             <td
                                 class="text-center border-grey-light border hover:bg-gray-100 p-3"
                             >
-                                {{ changeFormat(payment.date) }}
+                                {{ changeFormat(payroll.date) }}
                             </td>
                             <td
                                 class="text-center border-grey-light border hover:bg-gray-100 p-3"
                             >
-                                {{ payment.patient.fist_name }}
-                                {{ payment.patient.last_name }}
+                                {{ payroll.employee.fist_name }}
+                                {{ payroll.employee.last_name }}
                             </td>
                             <td
                                 class="text-center border-grey-light border hover:bg-gray-100 p-3 truncate"
                             >
-                                {{ payment.amount }}
+                                {{ payroll.concept }}
                             </td>
 
                             <td
                                 class="text-center border-grey-light border hover:bg-gray-100 p-3 truncate"
                             >
-                                {{ payment.status }}
+                                {{ payroll.amount }}
                             </td>
 
                             <td
                                 class="text-center border-grey-light border hover:bg-gray-100 p-3 text-red-400 hover:text-red-600 hover:font-medium cursor-pointer"
                             >
-                                <button
-                                    @click="viewPayment(payment)"
+                                <Link
+                                    :href="route('payrolls.show', payroll.id)"
                                     class="text-white bg-cyan-700 hover:bg-cyan-800 focus:ring-4 focus:outline-none focus:ring-cyan-300 font-medium rounded-lg text-sm p-2.5 text-center inline-flex items-center me-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
                                 >
                                     <svg
@@ -165,7 +156,7 @@ const deletepayment = (payment) => {
                                             y2="16.65"
                                         />
                                     </svg>
-                                </button>
+                                </Link>
 
                                 <Link
                                     v-if="
@@ -173,7 +164,7 @@ const deletepayment = (payment) => {
                                         $page.props.user['roles'] ==
                                             'administrator'
                                     "
-                                    :href="route('payments.edit', payment.id)"
+                                    :href="route('payrolls.edit', payroll.id)"
                                     class="text-white bg-cyan-700 hover:bg-cyan-800 focus:ring-4 focus:outline-none focus:ring-cyan-300 font-medium rounded-lg text-sm p-2.5 text-center inline-flex items-center me-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
                                 >
                                     <svg
@@ -202,7 +193,7 @@ const deletepayment = (payment) => {
                                         $page.props.user['roles'] ==
                                             'administrator'
                                     "
-                                    @click="openDeleteModal(payment)"
+                                    @click="openDeleteModal(payroll)"
                                     class="text-white bg-cyan-700 hover:bg-cyan-800 focus:ring-4 focus:outline-none focus:ring-cyan-300 font-medium rounded-lg text-sm p-2.5 text-center inline-flex items-center me-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
                                 >
                                     <svg
@@ -233,273 +224,6 @@ const deletepayment = (payment) => {
                         </tr>
                     </tbody>
                 </table>
-            </div>
-
-            <!-- nueva tabla-->
-
-            <div class="rounded-b-lg border-t border-gray-200 px-4 py-2">
-                <ol class="flex justify-end gap-1 text-xs font-medium">
-                    <li v-if="payments.current_page > 1">
-                        <Link
-                            :href="payments.prev_page_url"
-                            class="inline-flex size-8 items-center justify-center rounded border border-gray-100 bg-white text-gray-900 rtl:rotate-180"
-                        >
-                            <span class="sr-only">Prev Page</span>
-                            <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                class="h-3 w-3"
-                                viewBox="0 0 20 20"
-                                fill="currentColor"
-                            >
-                                <path
-                                    fill-rule="evenodd"
-                                    d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z"
-                                    clip-rule="evenodd"
-                                />
-                            </svg>
-                        </Link>
-                    </li>
-
-                    <li v-if="payments.current_page < payments.last_page">
-                        <Link
-                            :href="payments.next_page_url"
-                            class="inline-flex size-8 items-center justify-center rounded border border-gray-100 bg-white text-gray-900 rtl:rotate-180"
-                        >
-                            <span class="sr-only">Next Page</span>
-                            <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                class="h-3 w-3"
-                                viewBox="0 0 20 20"
-                                fill="currentColor"
-                            >
-                                <path
-                                    fill-rule="evenodd"
-                                    d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
-                                    clip-rule="evenodd"
-                                />
-                            </svg>
-                        </Link>
-                    </li>
-                </ol>
-            </div>
-        </div>
-
-        <!--Ajustes y pruebas -->
-
-        <!-- Detalle del paquete -->
-        <div
-            id="view-payment-modal"
-            tabindex="-1"
-            v-show="modalpayment"
-            class="overflow-y-auto overflow-x-auto fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full"
-        >
-            <div class="mx-auto relative p-4 w-full max-w-2xl max-h-full">
-                <!-- Modal content -->
-                <div
-                    class="relative bg-white rounded-lg shadow dark:bg-gray-700"
-                >
-                    <!-- Modal header -->
-                    <div
-                        class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600"
-                    >
-                        <h3
-                            class="text-xl font-semibold text-gray-900 dark:text-white"
-                        >
-                            Informacion del pago
-                        </h3>
-                        <button
-                            type="button"
-                            class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
-                            @click="closeViewModal()"
-                        >
-                            <svg
-                                class="w-3 h-3"
-                                aria-hidden="true"
-                                xmlns="http://www.w3.org/2000/svg"
-                                fill="none"
-                                viewBox="0 0 14 14"
-                            >
-                                <path
-                                    stroke="currentColor"
-                                    stroke-linecap="round"
-                                    stroke-linejoin="round"
-                                    stroke-width="2"
-                                    d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"
-                                />
-                            </svg>
-                            <span class="sr-only">Close modal</span>
-                        </button>
-                    </div>
-
-                    <div
-                        v-if="paymentview.lenth > 0"
-                        class="grid grid grid-cols-4 gap-2 text-base leading-relaxed text-gray-500 dark:text-gray-400 p-5"
-                    >
-                        <div>
-                            <p><b>Fecha</b></p>
-                            {{ paymentview.date }}
-                        </div>
-                        <div>
-                            <p><b>Paciente</b></p>
-                            {{ paymentview.patient.fist_name }}
-                            {{ paymentview.patient.last_name }}
-                        </div>
-                        <div>
-                            <p><b>Monto</b></p>
-                            {{ paymentview.amount }}
-                        </div>
-                        <div>
-                            <p><b>Status</b></p>
-                            {{ paymentview.status }}
-                        </div>
-                    </div>
-                    <div
-                        v-if="listServicesPaid"
-                        class="grid grid grid-cols-1 gap-2 text-base leading-relaxed text-gray-500 dark:text-gray-400 p-5"
-                    >
-                        <h1>Lista de Servicios:</h1>
-                        <table
-                            class="w-full flex flex-row flex-no-wrap sm:bg-white rounded-lg overflow-hidden sm:shadow-lg my-5"
-                        >
-                            <thead>
-                                <tr
-                                    class="bg-cyan-600 flex flex-col flex-no wrap sm:table-row rounded-l-lg sm:rounded-none mb-2 sm:mb-0"
-                                >
-                                    <th class="p-3 text-center text-white">
-                                        Fecha
-                                    </th>
-                                    <th class="p-3 text-center text-white">
-                                        Tipo
-                                    </th>
-                                    <th class="p-3 text-center text-white">
-                                        Asignado A
-                                    </th>
-                                    <th class="p-3 text-center text-white">
-                                        Monto
-                                    </th>
-                                </tr>
-                            </thead>
-                            <tbody
-                                v-for="servicePaid in listServicesPaid"
-                                class="flex-1 sm:flex-none"
-                            >
-                                <tr
-                                    class="flex flex-col flex-no wrap sm:table-row mb-2 sm:mb-0"
-                                >
-                                    <td
-                                        class="text-center border-grey-light border p-3"
-                                    >
-                                        {{
-                                            servicePaid.consultation_id
-                                                ? servicePaid.consultation.date
-                                                : servicePaid.package.date
-                                        }}
-                                    </td>
-                                    <td
-                                        class="text-center border-grey-light border p-3"
-                                    >
-                                        {{
-                                            servicePaid.consultation_id
-                                                ? "Consulta"
-                                                : servicePaid.package
-                                                      .service_name
-                                        }}
-                                    </td>
-                                    <td
-                                        class="text-center border-grey-light border p-3"
-                                    >
-                                        {{
-                                            servicePaid.consultation_id
-                                                ? servicePaid.consultation
-                                                      .employee_id
-                                                : "--"
-                                        }}
-                                    </td>
-
-                                    <td
-                                        class="text-center border-grey-light border p-3"
-                                    >
-                                        {{
-                                            servicePaid.consultation_id
-                                                ? servicePaid.consultation
-                                                      .amount
-                                                : servicePaid.package
-                                                      .amount_paid
-                                        }}
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                    <!---->
-                    <div
-                        v-if="paymentsList"
-                        class="grid grid grid-cols-1 gap-2 text-base leading-relaxed text-gray-500 dark:text-gray-400 p-5"
-                    >
-                        <h1>Resumen de pago:</h1>
-                        <table
-                            class="w-full flex flex-row flex-no-wrap sm:bg-white rounded-lg overflow-hidden sm:shadow-lg my-5"
-                        >
-                            <thead>
-                                <tr
-                                    class="bg-cyan-600 flex flex-col flex-no wrap sm:table-row rounded-l-lg sm:rounded-none mb-2 sm:mb-0"
-                                >
-                                    <th class="p-3 text-center text-white">
-                                        Metodo de pago
-                                    </th>
-                                    <th class="p-3 text-center text-white">
-                                        Monto
-                                    </th>
-                                    <th class="p-3 text-center text-white">
-                                        Referencia
-                                    </th>
-                                    <th class="p-3 text-center text-white">
-                                        Comprobante
-                                    </th>
-                                    <th class="p-3 text-center text-white">
-                                        Comprobante
-                                    </th>
-                                </tr>
-                            </thead>
-                            <tbody
-                                v-for="paymentsCheck in paymentsList"
-                                class="flex-1 sm:flex-none"
-                            >
-                                <tr
-                                    class="flex flex-col flex-no wrap sm:table-row mb-2 sm:mb-0"
-                                >
-                                    <td
-                                        class="text-center border-grey-light border p-3"
-                                    >
-                                        {{ paymentsCheck.payment_method.name }}
-                                        |
-                                        {{ paymentsCheck.payment_method.bank }}
-                                    </td>
-                                    <td
-                                        class="text-center border-grey-light border p-3"
-                                    >
-                                        {{ paymentsCheck.parcial_amount }}
-                                    </td>
-                                    <td
-                                        class="text-center border-grey-light border p-3"
-                                    >
-                                        {{ paymentsCheck.reference }}
-                                    </td>
-
-                                    <td
-                                        class="text-center border-grey-light border p-3"
-                                    >
-                                        {{
-                                            paymentsCheck.url_capture
-                                                ? paymentsCheck.url_capture
-                                                : "S/C"
-                                        }}
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
             </div>
         </div>
 

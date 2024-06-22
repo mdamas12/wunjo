@@ -49,4 +49,9 @@ class Consultation extends Model
     {
         return $this->hasMany(Payment_detail::class, 'id');
     } 
+
+    public function payroll_detail():HasMany
+    {
+        return $this->hasMany(Payroll_detail::class, 'id');
+    } 
 }

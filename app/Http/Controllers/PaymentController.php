@@ -143,7 +143,13 @@ class PaymentController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $payment = Payment::with('patient')->where('id',$id)->first();
+        $paymentdetails = Payment_detail::with('consultation','package')->where('payment_id',$payment->id)->get();
+        $payment_checks = Payment_check::with('payment_method')->where('payment_id',$payment->id)->get();
+        $typemethods = Method_type::all();
+
+        return inertia('Payments/show', [ 'payment' => $payment , 'paymentdetails' => $paymentdetails, 'payment_checks' => $payment_checks, 'typemethods' => $typemethods]);
+    
     }
 
     /**

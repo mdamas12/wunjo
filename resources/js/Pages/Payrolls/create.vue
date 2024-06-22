@@ -1,10 +1,10 @@
 <script setup>
 import Applayout from "@/Layouts/AppLayout.vue";
 import { Link, useForm } from "@inertiajs/vue3";
-import PaymentForm from "@/Components/Payments/Form.vue";
+import PayrollsForm from "@/Components/Payrolls/Form.vue";
 
 defineProps({
-    patients: {
+    employees: {
         type: Object,
         required: true,
     },
@@ -12,19 +12,25 @@ defineProps({
         type: Object,
         required: true,
     },
+    therapy: {
+        type: Object,
+        required: true,
+    },
 });
 
 const form = useForm({
+    employee: "",
     date: "",
-    patient_id: "",
     amount: 0,
-    status: "POR CONFIRMAR",
-    consultaDetails: [],
-    packagesDetails: [],
-    paymentsdonelist: [],
-    partialPayments: new FormData(),
-    amount_paid: 0,
-    status_payment: "PENDIENTE",
+    status: true,
+    concept: "",
+
+    payrollsDetails: [],
+
+    payment_methods_id: "",
+    amount_pay: 0,
+    reference: "",
+    capture: null,
 });
 </script>
 
@@ -32,11 +38,11 @@ const form = useForm({
     <Applayout>
         <template #header>
             <h1 class="font-semibold text-xl text-gray-800 leading-tigh">
-                Registrar Pago
+                Registrar Pago de empleado
             </h1>
             <Link
                 class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
-                :href="route('payments.index')"
+                :href="route('payrolls.index')"
             >
                 <svg
                     class="h-10 w-10 text-cyan-700"
@@ -73,13 +79,14 @@ const form = useForm({
                     </h3>
                 </div>
                 <!-- Modal body -->
-                <PaymentForm
+                <PayrollsForm
                     :form="form"
-                    :patients="patients"
+                    :employees="employees"
                     :payment_methods="payment_methods"
-                    @submit="form.post(route('payments.store'))"
+                    :therapy="therapy"
+                    @submit="form.post(route('payrolls.store'))"
                 >
-                </PaymentForm>
+                </PayrollsForm>
             </div>
         </div>
 

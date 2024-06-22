@@ -90,7 +90,7 @@ defineEmits(["submit"]);
                 >
                     <h3>Pagos pendientes del cliente :</h3>
                     <table
-                        class="w-full flex flex-row flex-no-wrap sm:bg-white rounded-lg overflow-hidden sm:shadow-lg my-5"
+                        class="flex flex-row flex-no-wrap sm:bg-white rounded-lg sm:shadow-lg my-5 overflow-scroll"
                     >
                         <thead class="text-white">
                             <tr

@@ -70,21 +70,16 @@ const StatusConsultation = (consultation) => {
                 class="w-full"
             >
                 <svg
-                    class="h-10 w-10 text-cyan-700"
-                    width="24"
-                    height="24"
-                    viewBox="0 0 24 24"
-                    stroke-width="2"
-                    stroke="currentColor"
+                    class="h-8 w-8 text-cyan-700"
                     fill="none"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
                 >
-                    <path stroke="none" d="M0 0h24v24H0z" />
-                    <line x1="9" y1="12" x2="15" y2="12" />
-                    <line x1="12" y1="9" x2="12" y2="15" />
                     <path
-                        d="M4 6v-1a1 1 0 0 1 1 -1h1m5 0h2m5 0h1a1 1 0 0 1 1 1v1m0 5v2m0 5v1a1 1 0 0 1 -1 1h-1m-5 0h-2m-5 0h-1a1 1 0 0 1 -1 -1v-1m0 -5v-2m0 -5"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M17 14v6m-3-3h6M6 10h2a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v2a2 2 0 002 2zm10 0h2a2 2 0 002-2V6a2 2 0 00-2-2h-2a2 2 0 00-2 2v2a2 2 0 002 2zM6 20h2a2 2 0 002-2v-2a2 2 0 00-2-2H6a2 2 0 00-2 2v2a2 2 0 002 2z"
                     />
                 </svg>
             </Link>
@@ -122,7 +117,7 @@ const StatusConsultation = (consultation) => {
                             <td
                                 class="text-center border-grey-light border hover:bg-gray-100 p-3"
                             >
-                                {{ consultation.date }}
+                                {{ changeFormat(consultation.date) }}
                             </td>
                             <td
                                 class="text-center border-grey-light border hover:bg-gray-100 p-3 truncate"
@@ -492,6 +487,10 @@ export default {
         closeDetail() {
             this.modalDetail = false;
             return;
+        },
+        changeFormat(date) {
+            let newdate = date.split("-");
+            return newdate[2] + "/" + newdate[1] + "/" + newdate[0];
         },
     },
 };

@@ -13,11 +13,14 @@ return new class extends Migration
     {
         Schema::create('payrolls', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('method_type_id')->unsigned();
-            $table->string('titular', 30);
-            $table->string('bank', 30); 
-            $table->string('phone', 30); 
+            $table->unsignedBigInteger('employee_id')->unsigned();
+            $table->date('date');
+            $table->float('amount'); 
+            $table->string('concept'); 
+            $table->boolean('status'); 
             $table->timestamps();
+
+            $table->foreign('employee_id')->references('id')->on('employees');
         });
     }
 
