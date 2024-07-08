@@ -1,8 +1,12 @@
 <script setup>
 import Applayout from "@/Layouts/AppLayout.vue";
+import wjAppLayout from "@/Layouts/WunjoLayout.vue";
 import { Link, useForm } from "@inertiajs/vue3";
+import InputLabel from "@/Components/InputLabel.vue";
+import TextInput from "@/Components/TextInput.vue";
 import InputError from "@/Components/InputError.vue";
 import ConsultationForm from "@/Components/Consultations/Form.vue";
+import { Inertia } from "@inertiajs/inertia";
 import { router } from "@inertiajs/vue3";
 
 const props = defineProps({
@@ -24,46 +28,53 @@ const formConsultation = useForm({
 </script>
 
 <template>
-    <Applayout>
-        <template #header>
-            <h1 class="font-semibold text-xl text-gray-800 leading-tigh mb-3">
-                Detalle de la consulta
-            </h1>
-            <Link
-                :href="route('consultations.index')"
-                class="inline-flex items-center justify-center mx-2 text-base font-medium text-gray-600 rounded-lg bg-slate-50 hover:text-gray-900 hover:bg-slate-200 dark:text-gray-400 dark:bg-gray-800 dark:hover:bg-gray-700 dark:hover:text-white border-2 border-cyan-600"
-            >
-                <svg
-                    class="h-8 w-8 text-cyan-600"
-                    width="24"
-                    height="24"
-                    viewBox="0 0 24 24"
-                    stroke-width="2"
-                    stroke="currentColor"
-                    fill="none"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                >
-                    <path stroke="none" d="M0 0h24v24H0z" />
-                    <line x1="4" y1="12" x2="14" y2="12" />
-                    <line x1="4" y1="12" x2="8" y2="16" />
-                    <line x1="4" y1="12" x2="8" y2="8" />
-                    <line x1="20" y1="4" x2="20" y2="20" />
-                </svg>
-                <span class="w-full">Volver</span>
-            </Link>
-        </template>
+    <wjAppLayout>
+        <template #header> </template>
         <!-- Main Add Branch -->
-        <div class="w-[80%] mx-auto rounded-lg border border-gray-200 p-5 m-5">
-            <div class="grid grid-cols-3 border-b">
-                <div class="flex pl-0 mt-3 space-x-1 sm:pl-2 sm:mt-0">
-                    <Link
+        <div class="w-[90%] mx-auto rounded-lg border border-gray-200 p-5 m-5">
+            <div
+                class="flex justify-between mb-3 pb-2 border-b-gray-200 border-b-2"
+            >
+                <h1
+                    class="flex font-semibold text-xl text-gray-700 leading-tigh"
+                >
+                    Detalle de Consulta
+                </h1>
+                <Link
+                    :href="route('consultations.index')"
+                    class="w-full inline-flex mx-3 items-center justify-center w-1/2 px-3 py-2 text-sm font-medium text-center text-white rounded-lg bg-gray-800 hover:bg-gray-700 focus:ring-4 focus:ring-blue-300 sm:w-auto dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                >
+                    <svg
+                        class="h-6 w-6 text-white"
+                        width="24"
+                        height="24"
+                        viewBox="0 0 24 24"
+                        stroke-width="2"
+                        stroke="currentColor"
+                        fill="none"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                    >
+                        <path stroke="none" d="M0 0h24v24H0z" />
+                        <path
+                            d="M14 8v-2a2 2 0 0 0 -2 -2h-7a2 2 0 0 0 -2 2v12a2 2 0 0 0 2 2h7a2 2 0 0 0 2 -2v-2"
+                        />
+                        <path d="M20 12h-13l3 -3m0 6l-3 -3" />
+                    </svg>
+                    Volver
+                </Link>
+            </div>
+            <div
+                class="grid gap-2 text-sm lg:grid-cols-5 md:grid-cols-3 sm:grid-cols-3 border-b"
+            >
+                <div>
+                    <button
                         v-if="
                             $page.props.user['roles'] == 'supra' ||
                             $page.props.user['roles'] == 'administrator'
                         "
-                        :href="route('consultations.edit', consultation.id)"
-                        class="inline-flex justify-center p-1 text-gray-500 rounded cursor-pointer hover:text-gray-900 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+                        @click="goToedit(consultation.id)"
+                        class="p-1 text-gray-500 rounded cursor-pointer hover:text-gray-900 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
                     >
                         <svg
                             class="h-8 w-8 text-gray-600"
@@ -83,35 +94,44 @@ const formConsultation = useForm({
                             />
                             <line x1="16" y1="5" x2="19" y2="8" />
                         </svg>
-
-                        <span class="w-full items-center my-1">Editar</span>
-                    </Link>
+                        Editar
+                    </button>
+                </div>
+                <div>
                     <button
                         @click="addDetail(consultation)"
-                        class="inline-flex justify-center p-1 text-gray-500 rounded cursor-pointer hover:text-gray-900 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+                        class="p-1 text-gray-500 rounded cursor-pointer hover:text-gray-900 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
                     >
                         <svg
-                            class="h-8 w-8 text-gray-600"
-                            fill="none"
+                            class="h-8 w-8 text-gray-700"
+                            width="24"
+                            height="24"
                             viewBox="0 0 24 24"
+                            stroke-width="2"
                             stroke="currentColor"
+                            fill="none"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
                         >
-                            <path
-                                stroke-linecap="round"
-                                stroke-linejoin="round"
-                                stroke-width="2"
-                                d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"
-                            />
+                            <path stroke="none" d="M0 0h24v24H0z" />
+                            <rect x="4" y="5" width="16" height="16" rx="2" />
+                            <line x1="16" y1="3" x2="16" y2="7" />
+                            <line x1="8" y1="3" x2="8" y2="7" />
+                            <line x1="4" y1="11" x2="20" y2="11" />
+                            <line x1="10" y1="16" x2="14" y2="16" />
+                            <line x1="12" y1="14" x2="12" y2="18" />
                         </svg>
-                        <span class="w-full items-center my-1">Detalles</span>
+                        Tratamiento
                     </button>
+                </div>
+                <div>
                     <button
                         v-if="
                             $page.props.user['roles'] == 'supra' ||
                             $page.props.user['roles'] == 'employee'
                         "
-                        @click="addevaluation(consultation)"
-                        class="inline-flex justify-center p-1 text-gray-500 rounded cursor-pointer hover:text-gray-900 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+                        @click="addevaluation()"
+                        class="justify-center p-1 text-gray-500 rounded cursor-pointer hover:text-gray-900 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
                     >
                         <svg
                             class="h-8 w-8 text-gray-600"
@@ -132,15 +152,17 @@ const formConsultation = useForm({
                             <line x1="19" y1="7" x2="19" y2="10" />
                             <line x1="19" y1="14" x2="19" y2="14.01" />
                         </svg>
-                        <span class="w-full items-center my-1">Evaluación</span>
+                        Evaluación
                     </button>
+                </div>
+                <div>
                     <button
                         v-if="
                             $page.props.user['roles'] == 'supra' ||
                             $page.props.user['roles'] == 'administrator'
                         "
-                        @click="deletemsg()"
-                        class="inline-flex justify-center p-1 text-gray-500 rounded cursor-pointer hover:text-gray-900 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+                        @click="changeStatus(consultation)"
+                        class="justify-center p-1 text-gray-500 rounded cursor-pointer hover:text-gray-900 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
                     >
                         <svg
                             class="h-8 w-8 text-gray-600"
@@ -152,15 +174,16 @@ const formConsultation = useForm({
                                 stroke-linecap="round"
                                 stroke-linejoin="round"
                                 stroke-width="2"
-                                d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                                d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"
                             />
                         </svg>
-                        <span class="w-full items-center my-1">Eliminar</span>
+                        Procesar
                     </button>
-
+                </div>
+                <div>
                     <a
                         href="#"
-                        class="inline-flex justify-center p-1 text-gray-500 rounded cursor-pointer hover:text-gray-900 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+                        class="justify-center p-1 text-gray-500 rounded cursor-pointer hover:text-gray-900 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
                     >
                         <svg
                             class="w-6 h-6"
@@ -175,10 +198,13 @@ const formConsultation = useForm({
                     </a>
                 </div>
             </div>
+
             <div class="">
-                <div class="grid grid-cols-3 my-5">
+                <div
+                    class="grid lg:grid-cols-4 lg:grid-cols-2 sm:grid-cols-2 text-sm my-5"
+                >
                     <!--  content -->
-                    <div class="p-4 md:p-5 border-b rounded-t">
+                    <div class="p-2 md:p-2 border-b rounded-t">
                         <h3>Paciente</h3>
 
                         <p class="text-base text-gray-500 dark:text-gray-400">
@@ -186,21 +212,31 @@ const formConsultation = useForm({
                             {{ consultation.patient.last_name }}
                         </p>
                     </div>
-                    <div class="p-4 md:p-5 border-b rounded-t">
+                    <div class="p-2 md:p-2 border-b rounded-t">
                         <h3>Fecha</h3>
                         <p class="text-base text-gray-500 dark:text-gray-400">
-                            {{ consultation.date }}
+                            {{ changeFormat(consultation.date) }}
                         </p>
                     </div>
-                    <div class="p-4 md:p-5 border-b rounded-t">
+                    <div class="p-2 md:p-2 border-b rounded-t">
                         <h3>Hora</h3>
                         <p class="text-base text-gray-500 dark:text-gray-400">
                             {{ consultation.hour }}
                         </p>
                     </div>
+                    <div class="p-2 md:p-2 border-b rounded-t">
+                        <h3>Sede</h3>
+
+                        <p class="text-base text-gray-500 dark:text-gray-400">
+                            {{ consultation.branch.name }}
+                        </p>
+                    </div>
                 </div>
-                <div class="grid grid-cols-3 my-5">
-                    <div class="p-4 md:p-5 space-y-4 border-b rounded-t">
+
+                <div
+                    class="grid lg:grid-cols-3 md:grid-cols-3 sm:grid-cols-1 text-sm my-5"
+                >
+                    <div class="p-2 border-b rounded-t">
                         <h3>Asiganado A:</h3>
                         <p
                             class="text-base leading-relaxed text-gray-500 dark:text-gray-400"
@@ -210,7 +246,7 @@ const formConsultation = useForm({
                         </p>
                     </div>
 
-                    <div class="p-4 md:p-5 space-y-4 border-b rounded-t">
+                    <div class="p-2 border-b rounded-t">
                         <h3>Status de consulta</h3>
                         <p
                             class="text-base leading-relaxed text-gray-500 dark:text-gray-400"
@@ -219,17 +255,17 @@ const formConsultation = useForm({
                         </p>
                     </div>
                 </div>
-                <div class="grid grid-cols-2 my-5">
-                    <div class="p-4 md:p-5 space-y-4 border-b rounded-t">
+                <div class="grid grid-cols-2 my-5 sm:text-sm">
+                    <div class="p-2 border-b rounded-t">
                         <h3>Monto Total</h3>
                         <p
                             class="text-base leading-relaxed text-gray-500 dark:text-gray-400"
                         >
-                            {{ consultation.amount }}
+                            S/. {{ consultation.amount }}
                         </p>
                     </div>
 
-                    <div class="p-4 md:p-5 space-y-4 border-b rounded-t">
+                    <div class="p-2 border-b rounded-t">
                         <h3>Status de pago</h3>
                         <p
                             class="text-base leading-relaxed text-gray-500 dark:text-gray-400"
@@ -243,85 +279,89 @@ const formConsultation = useForm({
                     </div>
                 </div>
             </div>
+            <div class="overflow-auto rounded-lg shadow p-4">
+                <table class="w-full protable">
+                    <thead>
+                        <tr>
+                            <th>Servicio / Paquete</th>
+                            <th>Monto</th>
+                            <th>Eliminar</th>
+                        </tr>
+                    </thead>
+                    <tbody v-for="detail in list_details">
+                        <tr>
+                            <td>
+                                {{
+                                    detail.service
+                                        ? detail.service.name
+                                        : detail.package.service_name
+                                }}
+                            </td>
+                            <td>
+                                {{
+                                    detail.service
+                                        ? detail.service.price
+                                        : detail.package.service.price
+                                }}
+                            </td>
 
-            <table
-                class="w-full flex flex-row flex-no-wrap sm:bg-white rounded-lg overflow-hidden sm:shadow-lg my-5"
-            >
-                <thead class="text-white">
-                    <tr
-                        class="bg-cyan-600 flex flex-col flex-no wrap sm:table-row rounded-l-lg sm:rounded-none mb-2 sm:mb-0"
-                    >
-                        <th class="p-3 text-center">Servicio / Paquete</th>
-                        <th class="p-3 text-center">Monto</th>
-                        <th class="p-3 text-center">Eliminar</th>
-                    </tr>
-                </thead>
-                <tbody
-                    v-for="detail in list_details"
-                    class="flex-1 sm:flex-none"
-                >
-                    <tr
-                        class="flex flex-col flex-no wrap sm:table-row mb-2 sm:mb-0"
-                    >
-                        <td
-                            class="text-center border-grey-light border hover:bg-gray-100 p-3"
-                        >
-                            {{
-                                detail.service
-                                    ? detail.service.name
-                                    : detail.package.service_name
-                            }}
-                        </td>
-                        <td
-                            class="text-center border-grey-light border hover:bg-gray-100 p-3"
-                        >
-                            {{
-                                detail.service
-                                    ? detail.service.price
-                                    : detail.package.service.price
-                            }}
-                        </td>
-
-                        <td
-                            class="text-center border-grey-light border hover:bg-gray-100 p-3 text-red-400 hover:text-red-600 hover:font-medium cursor-pointer"
-                        >
-                            <button
-                                @click="deleteDetail(detail)"
-                                class="text-white bg-cyan-700 hover:bg-cyan-800 focus:ring-4 focus:outline-none focus:ring-cyan-300 font-medium rounded-lg text-sm p-2.5 text-center inline-flex items-center me-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-                            >
-                                <svg
-                                    class="h-4 w-4 text-white-700"
-                                    width="24"
-                                    height="24"
-                                    viewBox="0 0 24 24"
-                                    stroke-width="2"
-                                    stroke="currentColor"
-                                    fill="none"
-                                    stroke-linecap="round"
-                                    stroke-linejoin="round"
+                            <td>
+                                <button
+                                    @click="deleteDetail(detail)"
+                                    class="text-white bg-cyan-700 hover:bg-cyan-800 focus:ring-4 focus:outline-none focus:ring-cyan-300 font-medium rounded-lg text-sm p-2.5 text-center inline-flex items-center me-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
                                 >
-                                    <path stroke="none" d="M0 0h24v24H0z" />
-                                    <line x1="4" y1="7" x2="20" y2="7" />
-                                    <line x1="10" y1="11" x2="10" y2="17" />
-                                    <line x1="14" y1="11" x2="14" y2="17" />
-                                    <path
-                                        d="M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2 -2l1 -12"
-                                    />
-                                    <path
-                                        d="M9 7v-3a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v3"
-                                    />
-                                </svg>
-                            </button>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
+                                    <svg
+                                        class="h-4 w-4 text-white-700"
+                                        width="24"
+                                        height="24"
+                                        viewBox="0 0 24 24"
+                                        stroke-width="2"
+                                        stroke="currentColor"
+                                        fill="none"
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                    >
+                                        <path stroke="none" d="M0 0h24v24H0z" />
+                                        <line x1="4" y1="7" x2="20" y2="7" />
+                                        <line x1="10" y1="11" x2="10" y2="17" />
+                                        <line x1="14" y1="11" x2="14" y2="17" />
+                                        <path
+                                            d="M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2 -2l1 -12"
+                                        />
+                                        <path
+                                            d="M9 7v-3a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v3"
+                                        />
+                                    </svg>
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div
+                class="grid grid-cols-1 my-5 text-sm md:grid-cols-2 lg:grid-cols-2"
+            >
+                <div class="p-2 border border-grey-200 mx-2 rounded-t">
+                    <h3>Evaluación</h3>
+                    <p
+                        class="text-base leading-relaxed text-gray-500 dark:text-gray-400"
+                    >
+                        {{ consultation.evaluation }}
+                    </p>
+                </div>
+
+                <div class="p-2 border border-grey-200 mx-2 rounded-t">
+                    <h3>Diagnóstico</h3>
+                    <p
+                        class="text-base leading-relaxed text-gray-500 dark:text-gray-400"
+                    >
+                        {{ consultation.diagnostic }}
+                    </p>
+                </div>
+            </div>
         </div>
 
-        <!---->
-        <!--Ajustes y pruebas -->
-
-        <!-- Detalle del paquete -->
+        <!-- TRATAMIENTOS -->
         <div
             id="defaultd-modal"
             tabindex="-1"
@@ -368,8 +408,9 @@ const formConsultation = useForm({
                     </div>
                     <!-- Modal body -->
 
-                    <div class="col-span-6">
-                        <div class="col-span-6 m-1">
+                    <div class="col-span-6 p-3">
+                        <div class="col-span-6 my-2">
+                            <h3>Selecciona el tipo</h3>
                             <select
                                 class="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
                                 id="servicio_id"
@@ -381,9 +422,10 @@ const formConsultation = useForm({
                             </select>
                         </div>
                         <div
-                            class="col-span-6 m-1"
+                            class="col-span-6 my-3"
                             v-if="detail_type == 'PAQUETE'"
                         >
+                            <h3>Selecciona el paquete</h3>
                             <select
                                 class="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
                                 id="servicio_id"
@@ -398,7 +440,8 @@ const formConsultation = useForm({
                             </select>
                         </div>
 
-                        <div class="col-span-6 m-1" v-else>
+                        <div class="col-span-6 my-3" v-else>
+                            <h3>Selecciona el Servicio</h3>
                             <select
                                 class="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
                                 id="servicio_id"
@@ -452,7 +495,122 @@ const formConsultation = useForm({
         </div>
 
         <!---->
-    </Applayout>
+
+        <!-- EVALUACION / DIAGNOSTICO -->
+        <div
+            id="diagnostic-modal"
+            tabindex="-1"
+            aria-hidden="true"
+            v-show="evaluation_modal"
+            class="overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full"
+        >
+            <div class="mx-auto relative p-4 w-full max-w-2xl max-h-full">
+                <!-- Modal content -->
+                <div
+                    class="relative bg-white rounded-lg shadow dark:bg-gray-700"
+                >
+                    <!-- Modal header -->
+                    <div
+                        class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600"
+                    >
+                        <h3
+                            class="text-xl font-semibold text-gray-900 dark:text-white"
+                        >
+                            Agregar Evaluación / Diagnóstico
+                        </h3>
+                        <button
+                            type="button"
+                            class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
+                            @click="closeEvaluation_modal()"
+                        >
+                            <svg
+                                class="w-3 h-3"
+                                aria-hidden="true"
+                                xmlns="http://www.w3.org/2000/svg"
+                                fill="none"
+                                viewBox="0 0 14 14"
+                            >
+                                <path
+                                    stroke="currentColor"
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    stroke-width="2"
+                                    d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"
+                                />
+                            </svg>
+                            <span class="sr-only">Close modal</span>
+                        </button>
+                    </div>
+                    <!-- Modal body -->
+
+                    <div class="col-span-6 p-5">
+                        <div class="col-span-6 my-3">
+                            <InputLabel for="evaluation">Evaluación</InputLabel>
+                            <textarea
+                                id="evaluation"
+                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                                v-model="consultation.evaluation"
+                                rows="4"
+                                placeholder="Evaluación del paciente"
+                            ></textarea>
+                        </div>
+                        <div class="col-span-6">
+                            <InputLabel for="diagnosticlabel"
+                                >Diagnóstico</InputLabel
+                            >
+                            <textarea
+                                id="diagnostic"
+                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                                v-model="consultation.diagnostic"
+                                rows="4"
+                                placeholder="Diagnóstico del paciente"
+                            ></textarea>
+                        </div>
+
+                        <button
+                            id="add_evadiag"
+                            @click="
+                                add_evaluationDiagnostic(
+                                    consultation.id,
+                                    consultation.evaluation,
+                                    consultation.diagnostic
+                                )
+                            "
+                            class="m-1 inline-flex items-center justify-center mx-2 text-base font-medium text-gray-600 rounded-lg bg-slate-50 hover:text-gray-900 hover:bg-slate-200 dark:text-gray-400 dark:bg-gray-800 dark:hover:bg-gray-700 dark:hover:text-white border-double border-4 border-cyan-600"
+                        >
+                            <svg
+                                class="h-8 w-8 text-cyan-600"
+                                width="24"
+                                height="24"
+                                viewBox="0 0 24 24"
+                                stroke-width="2"
+                                stroke="currentColor"
+                                fill="none"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                            >
+                                <path stroke="none" d="M0 0h24v24H0z" />
+                                <rect
+                                    x="3"
+                                    y="5"
+                                    width="18"
+                                    height="14"
+                                    rx="3"
+                                />
+                                <line x1="3" y1="10" x2="21" y2="10" />
+                                <line x1="7" y1="15" x2="7.01" y2="15" />
+                                <line x1="11" y1="15" x2="13" y2="15" />
+                            </svg>
+                            <span class="w-full">Agregar</span>
+                        </button>
+                    </div>
+                    <!-- Modal footer -->
+                </div>
+            </div>
+        </div>
+
+        <!---->
+    </wjAppLayout>
 </template>
 
 <script>
@@ -468,6 +626,7 @@ export default {
             list_details: [],
             detail: "",
             detail_type: "",
+            evaluation_modal: false,
         };
     },
 
@@ -476,6 +635,10 @@ export default {
     },
 
     methods: {
+        goToedit(consultation) {
+            Inertia.get(route("consultations.edit", consultation));
+            //router.visit("edit", consultation);
+        },
         loadDetails(consultation) {
             router.visit("listdetails", {
                 method: "post",
@@ -554,10 +717,43 @@ export default {
             this.addDetailShow = false;
         },
 
-        deletemsg() {
-            alert(
-                "Por seguridad, puedes eliminar la consulta desde la lista principal"
-            );
+        changeStatus(consultation) {
+            let status_payment = "PENDIENTE";
+
+            if (this.list_details[0].package) {
+                if (this.list_details[0].package.status_payment == "PAID") {
+                    status_payment = "PAID";
+                }
+                if (this.list_details[0].package.status_payment == "PARTIAL") {
+                    status_payment = "PARTIAL";
+                } else {
+                    status_payment = "PENDIENTE";
+                }
+            }
+            else{
+                status_payment = consultation.status_payment;
+            }
+
+            if (consultation.status == "REALIZADA") {
+                alert("¡La Cunsulta ya esta procesada!");
+                return;
+            }
+            router.visit("process", {
+                method: "post",
+                data: {
+                    consultation: consultation.id,
+                    status_payment: status_payment,
+                },
+                preserveState: true,
+                preserveScroll: true,
+                onSuccess: (resp) => {
+                    this.evaluation_modal = false;
+                    alert("¡La Consulta ha sido procesada!");
+                },
+                onError: (errors) => {
+                    console.log("erros");
+                },
+            });
         },
 
         saveDetail(consultation, detail_type, detail_id) {
@@ -625,12 +821,40 @@ export default {
             });
         },
 
-        addevaluation(consultation) {
-            console.log("evaluation");
+        add_evaluationDiagnostic(consultation, evaluation, diagnostic) {
+            router.visit("addevaluation", {
+                method: "post",
+                data: {
+                    consultation: consultation,
+                    evaluation: evaluation,
+                    diagnostic: diagnostic,
+                },
+                preserveState: true,
+                preserveScroll: true,
+                onSuccess: (resp) => {
+                    this.evaluation_modal = false;
+                    alert("¡Evaluacion / Diagnostico agregado con exito!");
+                },
+                onError: (errors) => {
+                    console.log("erros");
+                },
+            });
+            //alert(evaluation);
+        },
+
+        addevaluation() {
+            this.evaluation_modal = true;
+        },
+        closeEvaluation_modal() {
+            this.evaluation_modal = false;
         },
 
         addDiagnostico() {
             console.log("diagnostico");
+        },
+        changeFormat(date) {
+            let newdate = date.split("-");
+            return newdate[2] + "/" + newdate[1] + "/" + newdate[0];
         },
     },
 };
@@ -652,5 +876,52 @@ td:not(:last-child) {
 
 th:not(:last-child) {
     border-bottom: 2px solid rgba(0, 0, 0, 0.1);
+}
+
+.protable thead {
+    background-color: #f1f5f9;
+}
+
+.protable thead tr th {
+    letter-spacing: 0.03em;
+    color: #475569;
+    font-size: 0.875rem;
+    line-height: 1.75rem;
+}
+
+.protable tbody tr {
+    background-color: #f8fafc;
+}
+
+.protable tbody tr td {
+    padding: 2px;
+    text-align: center;
+    color: #374151;
+    font-size: 1rem;
+    font-weight: 300;
+}
+
+@media (max-width: 770px) {
+    .protable thead tr th {
+        font-size: 0.85rem;
+        line-height: 1rem;
+    }
+
+    .protable tbody tr td {
+        font-size: 0.75rem;
+        font-weight: 300;
+    }
+}
+
+@media (max-width: 500px) {
+    .protable thead tr th {
+        font-size: 0.6rem;
+        line-height: 1rem;
+    }
+
+    .protable tbody tr td {
+        font-size: 0.6rem;
+        font-weight: 300;
+    }
 }
 </style>

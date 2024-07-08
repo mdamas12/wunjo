@@ -1,5 +1,6 @@
 <script setup>
 import Applayout from "@/Layouts/AppLayout.vue";
+import wjAppLayout from "@/Layouts/WunjoLayout.vue";
 import { Link, useForm } from "@inertiajs/vue3";
 import PayrollsForm from "@/Components/Payrolls/Form.vue";
 import html2pdf from "html2pdf.js";
@@ -26,33 +27,44 @@ defineProps({
 </script>
 
 <template>
-    <Applayout>
-        <template #header>
-            <h1 class="font-semibold text-xl text-gray-800 leading-tigh">
-                Datos del pago
-            </h1>
-            <Link
-                class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
-                :href="route('payrolls.index')"
-            >
-                <svg
-                    class="h-8 w-8 text-cyan-700"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="2"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                >
-                    <polygon points="19 20 9 12 19 4 19 20" />
-                    <line x1="5" y1="19" x2="5" y2="5" />
-                </svg>
-            </Link>
-        </template>
+    <wjAppLayout>
+        <template #header> </template>
         <!-- Main Add Branch -->
         <div
             class="w-[80%] mx-auto rounded-lg border border-gray-200 p-5 m-5 grid grid-cols-1 gap-3"
         >
+            <div
+                class="flex justify-between mb-3 pb-2 border-b-gray-200 border-b-2"
+            >
+                <h1
+                    class="flex font-semibold text-xl text-gray-700 leading-tigh"
+                >
+                    Pago de Empleado
+                </h1>
+                <Link
+                    :href="route('payrolls.index')"
+                    class="w-full inline-flex mx-3 items-center justify-center w-1/2 px-3 py-2 text-sm font-medium text-center text-white rounded-lg bg-gray-800 hover:bg-gray-700 focus:ring-4 focus:ring-blue-300 sm:w-auto dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                >
+                    <svg
+                        class="h-6 w-6 text-white"
+                        width="24"
+                        height="24"
+                        viewBox="0 0 24 24"
+                        stroke-width="2"
+                        stroke="currentColor"
+                        fill="none"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                    >
+                        <path stroke="none" d="M0 0h24v24H0z" />
+                        <path
+                            d="M14 8v-2a2 2 0 0 0 -2 -2h-7a2 2 0 0 0 -2 2v12a2 2 0 0 0 2 2h7a2 2 0 0 0 2 -2v-2"
+                        />
+                        <path d="M20 12h-13l3 -3m0 6l-3 -3" />
+                    </svg>
+                    Volver
+                </Link>
+            </div>
             <div class="grid grid-cols-3">
                 <div class="flex pl-0 mt-3 space-x-1 sm:pl-2 sm:mt-0">
                     <button
@@ -116,7 +128,7 @@ defineProps({
             <!--
              ELEMENTOS PARA EXPORTAR-->
             <div class="" id="element-to-convert">
-                <div class="grid grid-cols-3">
+                <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-3">
                     <div
                         class="text-gray-800 p-4 md:p-5 space-y-4 border-b rounded-t"
                     >
@@ -153,41 +165,60 @@ defineProps({
                     <h2 class="text-gray-600 text-center font-bold">
                         Lista de consultas :
                     </h2>
-                    <div
-                        class="sm:bg-white rounded-lg overflow-hidden sm:shadow-lg my-5"
+                    <table
+                        class="w-full text-xs flex flex-row flex-no-wrap bg-white rounded-lg overflow-hidden shadow-lg my-5 overflow-auto inline-table"
                     >
-                        <ul class="grid grid-cols-3">
-                            <li class="p-3 text-center">Fecha</li>
-                            <li class="p-3 text-center">Monto</li>
-                            <li class="p-3 text-center">Paquete?</li>
-                        </ul>
-
-                        <ul
-                            class="grid grid-cols-3"
-                            v-for="(detail, index) in payrollDetail"
-                        >
-                            <li
-                                class="text-center border-grey-light border p-3"
+                        <thead class="text-white">
+                            <tr
+                                v-for="(detail, index) in payrollDetail"
+                                class="bg-gray-500 flex flex-col flex-no wrap sm:table-row rounded-l-lg sm:rounded-none mb-2 sm:mb-0"
                             >
-                                {{ changeFormat(detail.consultation.date) }}
-                            </li>
-                            <li
-                                class="text-center border-grey-light border p-3"
+                                <th
+                                    class="text-xs text-center wrap p-3 h-14 text-left md:text-xs lg:text-md"
+                                >
+                                    FECHA
+                                </th>
+                                <th
+                                    class="text-xs text-center wrap p-3 h-14 text-left md:text-xs lg:text-md"
+                                >
+                                    MONTO
+                                </th>
+                                <th
+                                    class="text-xs text-center wrap p-3 h-14 text-left md:text-xs lg:text-md"
+                                >
+                                    PAQUETE?
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody class="flex-1 sm:flex-none md:flex-none">
+                            <tr
+                                v-for="(detail, index) in payrollDetail"
+                                class="flex flex-col flex-no wrap sm:table-row mb-2 sm:mb-0 md:text-xs lg:text-md"
                             >
-                                {{ detail.consultation.amount }}
-                            </li>
-                            <li
-                                class="text-center border-grey-light border p-3"
-                            >
-                                {{
-                                    detail.consultation.haspackage == true
-                                        ? "Si"
-                                        : "No"
-                                }}
-                            </li>
-                        </ul>
-                    </div>
+                                <td
+                                    class="text-xs text-center wrap border-grey-light border p-3 h-14 md:text-xs lg:text-md overflow-auto"
+                                >
+                                    {{ changeFormat(detail.consultation.date) }}
+                                </td>
+                                <td
+                                    class="text-xs text-center wrap border-grey-light border p-3 h-14 md:text-xs lg:text-md overflow-auto"
+                                >
+                                    S/. {{ detail.consultation.amount }}
+                                </td>
+                                <td
+                                    class="text-xs text-center wrap border-grey-light border p-3 h-14 md:text-xs lg:text-md overflow-auto"
+                                >
+                                    {{
+                                        detail.consultation.haspackage == true
+                                            ? "Si"
+                                            : "No"
+                                    }}
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
+
                 <div class="grid grid-cols-3">
                     <div
                         class="text-gray-800 text-center p-4 md:p-5 space-y-4 border-b rounded-t"
@@ -207,7 +238,7 @@ defineProps({
                         <p
                             class="text-gray-500 text-center leading-relaxed text-gray-500 dark:text-gray-400"
                         >
-                            {{ payrollPay.amount }}
+                            S/. {{ payrollPay.amount }}
                         </p>
                     </div>
                     <div
@@ -304,7 +335,7 @@ defineProps({
                 </div>
             </div>
         </div>
-    </Applayout>
+    </wjAppLayout>
 </template>
 
 <script>
@@ -324,7 +355,19 @@ export default {
         },
 
         exportToPDF() {
-            html2pdf(document.getElementById("element-to-convert"));
+            let date = this.changeFormat(this.payroll.date);
+            html2pdf(document.getElementById("element-to-convert"), {
+                margin: 10,
+                filename: "Recibo_" + date + ".pdf",
+                image: { type: "jpeg", quality: 0.98 },
+                html2canvas: {
+                    scale: 2,
+                    logging: true,
+                    dpi: 192,
+                    letterRendering: true,
+                },
+                jsPDF: { unit: "mm", format: "a3", orientation: "portrait" },
+            });
         },
         getMethodpay(method) {
             let name = "";

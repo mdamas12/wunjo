@@ -1,5 +1,6 @@
 <script setup>
 import AppLayout from "@/Layouts/AppLayout.vue";
+import MdAppLayout from "@/Layouts/WunjoLayout.vue";
 import Welcome from "@/Components/Welcome.vue";
 import { Head, Link } from "@inertiajs/vue3";
 defineProps({
@@ -38,15 +39,11 @@ function handleImageError() {
 
 <template>
     <div v-if="$page.props.auth.user">
-        <AppLayout title="Dashboard">
-            <template #header>
-                <span class="font-semibold text-xl text-gray-800 leading-tight">
-                    Dashboard
-                </span>
-            </template>
+        <MdAppLayout title="Dashboard">
+            <template #header> </template>
 
             <div>
-                <div class="mx-auto sm:px-6 lg:px-8">
+                <div class="">
                     <div class="">
                         <Welcome
                             :ConsultationsPending="ConsultationsPending"
@@ -55,7 +52,7 @@ function handleImageError() {
                     </div>
                 </div>
             </div>
-        </AppLayout>
+        </MdAppLayout>
     </div>
-    <div v-else><h1>hola no hay sesion abierta</h1></div>
+    <div v-else><h1>Hola, no hay sesion abierta</h1></div>
 </template>

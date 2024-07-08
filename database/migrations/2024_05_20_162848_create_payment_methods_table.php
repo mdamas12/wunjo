@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('payment_methods', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('method_type_id')->unsigned();
+            $table->string('name', 30);
             $table->string('titular', 30);
             $table->string('bank', 30); 
             $table->string('phone', 30); 
@@ -26,6 +27,7 @@ return new class extends Migration
             $table->timestamps();
 
             $table->foreign('method_type_id')->references('id')->on('method_types');
+       
         });
     }
 

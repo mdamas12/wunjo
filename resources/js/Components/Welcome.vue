@@ -35,18 +35,19 @@ defineProps({
 </script>
 
 <template>
-    <div
-        class="grid grid lg:grid-cols-2 md:grid-cols-2 sm:grid-cols-1 gap-2 p-5"
-    >
-        <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg px-10">
+    <div class="grid gap-2 grid-cols-1 md:grid-cols-2 lg:grid-cols-2">
+        <div
+            class="min-h-80 bg-white overflow-hidden shadow-xl sm:rounded-lg p-2"
+        >
             <div class="bg-white border-b border-gray-200">
-                <h1 class="mt-1 font-medium text-gray-900 :sm text-xs">
-                    Consultas Pendientes para hoy:
+                <h1 class="mt-1 font-medium text-gray-800 text-md text-center">
+                    Consultas Pendientes para hoy
                 </h1>
-
-                <p>{{ msg_consultList }}</p>
             </div>
-            <div class="overflow-x-auto rounded-t-lg p-t-50">
+            <div
+                class="overflow-x-auto rounded-t-lg p-t-50"
+                v-if="consultations.length != 0"
+            >
                 <table
                     class="w-full flex flex-row flex-no-wrap sm:bg-white rounded-lg overflow-hidden sm:shadow-lg my-5"
                 >
@@ -103,15 +104,26 @@ defineProps({
                     </tbody>
                 </table>
             </div>
-        </div>
-        <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg px-10">
-            <div class="bg-white border-b border-gray-200">
-                <h1 class="mt-1 font-medium text-gray-700 :sm text-xs">
-                    Consultas Pendientes por Cancelar:
-                </h1>
-                <p>{{ msg_pending }}</p>
+            <div v-else>
+                <h2 class="text-red-700 text-bold text-center">
+                    {{ msg_consultList }}
+                </h2>
             </div>
-            <div class="overflow-x-auto rounded-t-lg p-t-50">
+        </div>
+        <div
+            class="min-h-80 bg-white overflow-hidden shadow-xl sm:rounded-lg p-2"
+        >
+            <div class="bg-white border-b border-gray-200">
+                <h1
+                    class="mt-1 font-medium text-gray-700 text-md text-center text-weight-bold"
+                >
+                    Consultas Pendientes por Cancelar
+                </h1>
+            </div>
+            <div
+                class="overflow-x-auto rounded-t-lg p-t-50"
+                v-if="pendinglist.length != 0"
+            >
                 <table
                     class="w-full flex flex-row flex-no-wrap sm:bg-white rounded-lg overflow-hidden sm:shadow-lg my-5"
                 >
@@ -168,6 +180,11 @@ defineProps({
                     </tbody>
                 </table>
             </div>
+            <div v-else>
+                <h2 class="text-red-700 text-bold text-center">
+                    {{ msg_pending }}
+                </h2>
+            </div>
         </div>
     </div>
 </template>
@@ -207,7 +224,7 @@ export default {
                 //console.log(this.consultations);
                 if (this.consultations.length == 0) {
                     this.msg_consultList =
-                        "No hay consultas registradas para el dia de hoy";
+                        "¡No hay consultas pendientes para el dia de hoy!";
                 }
 
                 router.visit("consultations/pendingpay", {
@@ -219,7 +236,7 @@ export default {
                             resp.props.jetstream.flash.pendinglist;
                         if (this.pendinglist.length == 0) {
                             this.msg_pending =
-                                "No hay consultas pendientepor cancelar";
+                                "¡No hay consultas pendiente por cancelar!";
                         }
                     },
                     onError: (errors) => {

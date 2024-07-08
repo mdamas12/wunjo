@@ -18,6 +18,10 @@ defineProps({
         type: Object,
         required: true,
     },
+    userbranch: {
+        type: Object,
+        required: false,
+    },
 
     updating: {
         type: Boolean,
@@ -39,14 +43,14 @@ defineEmits(["submit"]);
                     class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
                     v-model="form.name"
                     id="name"
-                    placeholder="Nombre de la Sucursal"
+                    placeholder="Nombre de usuario"
                     required=""
                 />
                 <InputError :message="$page.props.errors.name" />
             </div>
 
             <div class="col-span-6">
-                <InputLabel for="name">email</InputLabel>
+                <InputLabel for="email">email</InputLabel>
                 <input
                     type="email"
                     class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
@@ -72,49 +76,102 @@ defineEmits(["submit"]);
                 <InputError :message="$page.props.errors.role" />
             </div>
             <div class="p-1 grid grid-cols-1 gap-2">
-                <InputLabel for="name">Seleccionar las sedes</InputLabel>
-                <table
-                    class="w-full flex flex-row flex-no-wrap sm:bg-white rounded-lg overflow-hidden sm:shadow-lg my-5"
+                <div
+                    v-if="updating == false"
+                    class="p-1 grid grid-cols-1 gap-2"
                 >
-                    <thead class="text-white">
-                        <tr
-                            class="bg-gray-200 text-gray-500 flex flex-col flex-no wrap sm:table-row rounded-l-lg sm:rounded-none mb-2 sm:mb-0"
-                        >
-                            <th class="p-3 text-center">Sede</th>
-                            <th class="p-3 text-center">Seleccionar</th>
-                        </tr>
-                    </thead>
-
-                    <tbody
-                        v-for="(branch, index) in branches"
-                        class="flex-1 sm:flex-none"
+                    <InputLabel for="name">Seleccionar las sedes</InputLabel>
+                    <table
+                        class="w-full flex flex-row flex-no-wrap sm:bg-white rounded-lg overflow-hidden sm:shadow-lg my-5"
                     >
-                        <tr
-                            class="flex flex-col flex-no wrap sm:table-row mb-2 sm:mb-0"
-                        >
-                            <td
-                                class="text-center border-grey-light border p-3"
+                        <thead class="text-white">
+                            <tr
+                                class="bg-gray-200 text-gray-500 flex flex-col flex-no wrap sm:table-row rounded-l-lg sm:rounded-none mb-2 sm:mb-0"
                             >
-                                {{ branch.name }}
-                            </td>
-                            <td
-                                class="text-center border-grey-light border p-3 truncate"
-                            >
-                                <input
-                                    type="checkbox"
-                                    v-model="branch.checked"
-                                    @change="
-                                        branchCheck(branch.checked, branch.id)
-                                    "
-                                    class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
-                                />
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
+                                <th class="p-3 text-center">Sede</th>
+                                <th class="p-3 text-center">Seleccionar</th>
+                            </tr>
+                        </thead>
 
-            <div class="col-span-6">
+                        <tbody
+                            v-for="(branch, index) in branches"
+                            class="flex-1 sm:flex-none"
+                        >
+                            <tr
+                                class="flex flex-col flex-no wrap sm:table-row mb-2 sm:mb-0"
+                            >
+                                <td
+                                    class="text-center border-grey-light border p-3"
+                                >
+                                    {{ branch.name }}
+                                </td>
+                                <td
+                                    class="text-center border-grey-light border p-3 truncate"
+                                >
+                                    <input
+                                        type="checkbox"
+                                        v-model="branch.checked"
+                                        @change="
+                                            branchCheck(
+                                                branch.checked,
+                                                branch.id
+                                            )
+                                        "
+                                        class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                                    />
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <!-- editions-->
+                <div v-if="updating == true" class="p-1 grid grid-cols-1 gap-2">
+                    <InputLabel for="name">Seleccionar las sedes</InputLabel>
+                    <table
+                        class="w-full flex flex-row flex-no-wrap sm:bg-white rounded-lg overflow-hidden sm:shadow-lg my-5"
+                    >
+                        <thead class="text-white">
+                            <tr
+                                class="bg-gray-200 text-gray-500 flex flex-col flex-no wrap sm:table-row rounded-l-lg sm:rounded-none mb-2 sm:mb-0"
+                            >
+                                <th class="p-3 text-center">Sede</th>
+                                <th class="p-3 text-center">Seleccionar</th>
+                            </tr>
+                        </thead>
+
+                        <tbody
+                            v-for="(branch, index) in brancheslist"
+                            class="flex-1 sm:flex-none"
+                        >
+                            <tr
+                                class="flex flex-col flex-no wrap sm:table-row mb-2 sm:mb-0"
+                            >
+                                <td
+                                    class="text-center border-grey-light border p-3"
+                                >
+                                    {{ branch.name }}
+                                </td>
+                                <td
+                                    class="text-center border-grey-light border p-3 truncate"
+                                >
+                                    <input
+                                        type="checkbox"
+                                        v-model="branch.checked"
+                                        @change="
+                                            branchCheck(
+                                                branch.checked,
+                                                branch.id
+                                            )
+                                        "
+                                        class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                                    />
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div v-if="updating == false" class="col-span-6">
                 <InputLabel for="name">Password</InputLabel>
                 <input
                     type="password"
@@ -126,7 +183,7 @@ defineEmits(["submit"]);
                 />
                 <InputError :message="$page.props.errors.password" />
             </div>
-            <div class="col-span-6">
+            <div v-if="updating == false" class="col-span-6">
                 <InputLabel for="name">Password confirm</InputLabel>
                 <input
                     type="password"
@@ -168,7 +225,22 @@ export default {
             UserRole: "",
             userBranches: [],
             confirmPass: "",
+            brancheslist: [],
         };
+    },
+    mounted() {
+        // console.log(this.session);
+        if (this.updating == true) {
+            this.brancheslist = this.branches;
+            this.brancheslist.forEach((branch, i) => {
+                this.form.userBranches.forEach((item, j) => {
+                    if (item.branch_id == branch.id) {
+                        this.brancheslist[i].checked = true;
+                    }
+                });
+            });
+        }
+        // console.log(this.form.userBranches);
     },
     methods: {
         BranchValidate() {
@@ -188,7 +260,7 @@ export default {
                     }
                 });
             }
-            console.log(this.form.userBranches);
+            //console.log(this.form.userBranches);
         },
         Formvalidate() {
             if (this.form.name == "") {
@@ -207,15 +279,16 @@ export default {
                 alert("Debes agegar una sede al usuario");
                 return;
             }
+            if (this.updating == false) {
+                if (this.form.password == "") {
+                    alert("Debes agegar una constraseña al usuario");
+                    return;
+                }
 
-            if (this.form.password == "") {
-                alert("Debes agegar una constraseña al usuario");
-                return;
-            }
-
-            if (this.form.password != this.confirmPass) {
-                alert("La contraseña y su confirmacion deben de coincidir");
-                return;
+                if (this.form.password != this.confirmPass) {
+                    alert("La contraseña y su confirmacion deben de coincidir");
+                    return;
+                }
             } else {
                 return this.$emit("submit");
             }

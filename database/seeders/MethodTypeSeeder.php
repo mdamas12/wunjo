@@ -13,34 +13,24 @@ class MethodTypeSeeder extends Seeder
     public function run(): void
     {
         Method_type::create([
-            'name' => 'transferencia nacional',
+            'name' => 'POS',
             'status' => true,
         ]); 
 
         Method_type::create([
-            'name' => 'transferencia internacional',
+            'name' => 'YAPE',
             'status' => true
         ]); 
 
         Method_type::create([
-            'name' => 'zelle',
+            'name' => 'PLIN',
             'status' => true
         ]); 
 
         Method_type::create([
-            'name' => 'pago movil',
+            'name' => 'EFECTIVO',
             'status' => true
-        ]); 
-
-        Method_type::create([
-            'name' => 'punto de venta',
-            'status' => true
-        ]); 
-
-        Method_type::create([
-            'name' => 'efectivo',
-            'status' => true
-        ]); 
+        ]);  
     
     }
 }

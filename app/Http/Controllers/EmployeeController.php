@@ -18,7 +18,7 @@ class EmployeeController extends Controller
     public function index()
     {
    
-        $employees = Employee::paginate(10);
+        $employees = Employee::where('status','true')->paginate(5);
         $employees->load('position');
         
         return inertia('Employees/index',['employees' => $employees]);
@@ -75,9 +75,13 @@ class EmployeeController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Employee $employee)
+    public function destroy(String $id)
     {
-        $employee->delete();
-        return redirect()->route('employees.index')->with('success', 'Empleado eliminado satisfactoriamente');
+        $employee = Employee::where('id',$id)->first();
+        //dd($employee);
+        $employee->status = 'false'; 
+        $employee->update();
+        session()->flash('flash.message', 'success');
+        return redirect()->back();
     }
 }

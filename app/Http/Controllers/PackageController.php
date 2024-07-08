@@ -15,7 +15,7 @@ class PackageController extends Controller
      */
     public function index()
     {
-        $packages = Package::where('status','<>','DELETED')->paginate(10);
+        $packages = Package::where('status','<>','DELETED')->orderBy('date', 'DESC')->paginate(10);
         $packages->load('patient');
         $packages->load('service');
         return inertia('Packages/index',['packages' => $packages]);

@@ -14,21 +14,14 @@ class UserSeeder extends Seeder
      */
     public function run(): void
     {
-      $supradmin =   User::create([
-            'name' => 'admin',
-            'email' => 'admin@gmail.com',
-            'password' => Hash::make('admin')
- 
-        ]);
-      $supradmin->assignRole('supradmin');
-
+  
       $administrator =   User::create([
-            'name' => 'mdamas',
+            'name' => 'Marcos Damas',
             'email' => 'marcosdamas12@gmail.com',
-            'password' => Hash::make('123456')
+            'password' => Hash::make('Nomadas-12')
  
         ]);
 
-      $administrator->assignRole('administrator');
+      $administrator->assignRole('supra');
     }
 }

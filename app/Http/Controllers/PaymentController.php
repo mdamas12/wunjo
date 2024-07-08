@@ -147,6 +147,7 @@ class PaymentController extends Controller
         $paymentdetails = Payment_detail::with('consultation','package')->where('payment_id',$payment->id)->get();
         $payment_checks = Payment_check::with('payment_method')->where('payment_id',$payment->id)->get();
         $typemethods = Method_type::all();
+        $payment_methods = Payment_method::all();
 
         return inertia('Payments/show', [ 'payment' => $payment , 'paymentdetails' => $paymentdetails, 'payment_checks' => $payment_checks, 'typemethods' => $typemethods]);
     
@@ -281,6 +282,17 @@ class PaymentController extends Controller
          }
       
     }
+
+    public function processpay (Request $request){
+        $payment = payment::where('id', $request->payment)->first();
+
+        if ($payment){
+            $payment->status = "CONFIRMADO";
+            $payment->update();
+
+        }
+        return redirect()->back();
+     }
 
 
 }

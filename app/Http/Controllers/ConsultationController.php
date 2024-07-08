@@ -14,6 +14,7 @@ use App\Models\Employee;
 use App\Models\Branch;
 use App\Models\Service; 
 use App\Models\Package; 
+use App\Models\Userbranch; 
 
 use Carbon\Carbon;
 
@@ -24,12 +25,19 @@ class ConsultationController extends Controller
      */
     public function index()
     {
-        $consultations = Consultation::where('status','<>','DELETED')->paginate(10);
-        $consultations->load('branch');
-        $consultations->load('patient');
-        $consultations->load('employee');
 
-       
+   
+        //dd(auth()->user()->id);
+        $branches_user = Userbranch::where('user_id',auth()->user()->id)->get();
+        $consultations = Consultation::with('branch','patient','employee')
+                  ->where('status','<>','DELETED')
+                  ->where(function ($query) use($branches_user) {
+                   foreach($branches_user as $key) {
+                    $branch_id = $key['branch_id'];
+                    $query->orWhere('branch_id', 'LIKE', "%$branch_id%");
+                    
+                   }
+                })->paginate(10);
         return inertia('Consultations/index',['consultations' => $consultations]);
     }
 
@@ -39,8 +47,15 @@ class ConsultationController extends Controller
     public function create()
     {
         $patients = Patient::all();
-        $employees = Employee::all();
-        $branches = Branch::all();
+        //$employees = Employee::where();
+
+        $employees = DB::select("SELECT * FROM employees E 
+                                    INNER JOIN positions P ON E.position_id = P.id 
+                                    WHERE E.status = 'true' 
+                                    AND P.type = 'area'");
+
+        $branches = Userbranch::with('branch')->where('user_id',auth()->user()->id)->get();
+        //dd($branches);
         return inertia('Consultations/create', ['branches' => $branches, 'patients' => $patients , 'employees' => $employees]);
     }
 
@@ -61,6 +76,7 @@ class ConsultationController extends Controller
       
         $consultation->load('patient');
         $consultation->load('employee');
+        $consultation->load('branch');
         $services = Service::all();
     
         return inertia('Consultations/show',['consultation' => $consultation, 'services' => $services]);
@@ -74,7 +90,7 @@ class ConsultationController extends Controller
     {
         $patients = Patient::all();
         $employees = Employee::all();
-        $branches = Branch::all();
+        $branches = Userbranch::with('branch')->where('user_id',auth()->user()->id)->get();
 
         $consultation->load('branch');
         $consultation->load('patient');
@@ -296,6 +312,30 @@ class ConsultationController extends Controller
         session()->flash('flash.pendinglist', $consultations);
         return redirect()->back();
 
+     }
+
+     public function addevaluation (Request $request){
+        $consultation = Consultation::where('id', $request->consultation)->first();
+
+        if ($consultation){
+            $consultation->evaluation = $request->evaluation;
+            $consultation->diagnostic = $request->diagnostic;
+            $consultation->update();
+
+        }
+        return redirect()->back();
+     }
+
+     public function process (Request $request){
+        $consultation = Consultation::where('id', $request->consultation)->first();
+
+        if ($consultation){
+            $consultation->status = "REALIZADA";
+            $consultation->status_payment = $request->status_payment;
+            $consultation->update();
+
+        }
+        return redirect()->back();
      }
 
 }

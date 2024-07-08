@@ -41,6 +41,7 @@ class DashboardController extends Controller
             ->get();
 
         */
+        session()->flash('flash.prueba', "aqui van las sedes");
         return Inertia::render('Dashboard', [ 
             //'ConsultationsPending' => $consultations,
             //'PaymentPending' => $pendinglist,

@@ -143,7 +143,7 @@ class PayrollController extends Controller
         $payroll = Payroll::where('id',$request->payroll)->delete();
         
         return redirect()->route('payrolls.index');
-    }
+    }  
 
     public function searchworked(Request $request){
         $consultations = Consultation::where('employee_id', $request->employee)->where('status','REALIZADA')->where('status_payroll',false)->get();

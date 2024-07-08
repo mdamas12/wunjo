@@ -50,8 +50,11 @@ defineEmits(["submit"]);
                         id="branch_id"
                         v-model="form.branch_id"
                     >
-                        <option v-for="branch in branches" :value="branch.id">
-                            {{ branch.name }}
+                        <option
+                            v-for="branch in branches"
+                            :value="branch.branch_id"
+                        >
+                            {{ branch.branch.name }}
                         </option>
                     </select>
                     <InputError :message="$page.props.errors.employee_id" />
@@ -120,18 +123,22 @@ defineEmits(["submit"]);
                 <InputError :message="$page.props.errors.hour" />
             </div>
 
-            <div class="col-span-6">
-                <InputLabel for="patient">Paciente</InputLabel>
-                <select
-                    class="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-                    id="position_id"
-                    v-model="form.patient_id"
-                >
-                    <option v-for="patient in patients" :value="patient.id">
-                        {{ patient.fist_name }} {{ patient.last_name }}
-                    </option>
-                </select>
-                <InputError :message="$page.props.errors.patient_id" />
+            <div
+                class="col-span-6 grid grid-cols-1 md:grid-cols-1 lg:grid-cols-1"
+            >
+                <div>
+                    <InputLabel for="patient">Paciente</InputLabel>
+                    <select
+                        class="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                        id="position_id"
+                        v-model="form.patient_id"
+                    >
+                        <option v-for="patient in patients" :value="patient.id">
+                            {{ patient.fist_name }} {{ patient.last_name }}
+                        </option>
+                    </select>
+                    <InputError :message="$page.props.errors.patient_id" />
+                </div>
             </div>
 
             <div class="col-span-6">

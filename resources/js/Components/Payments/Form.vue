@@ -36,15 +36,17 @@ defineEmits(["submit"]);
     <FormSection @submitted="validateform()" class="">
         $emit('submit')
         <template #form>
-            <div class="p-1 grid grid-cols-2 gap-2">
-                <div class="rounded-lg">
+            <div
+                class="p-1 grid gap-2 grid-cols-1 md:grid-cols-2 lg:grid-cols-2"
+            >
+                <div class="text-sm rounded-sm">
                     <InputLabel for="date">Fecha</InputLabel>
                     <div class="relative max-w-sm">
                         <div
                             class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none"
                         >
                             <svg
-                                class="w-4 h-4 text-gray-500 dark:text-gray-400"
+                                class="w-4 h-4 text-gray-500 dark:text-gray-400 text-sm"
                                 aria-hidden="true"
                                 xmlns="http://www.w3.org/2000/svg"
                                 fill="currentColor"
@@ -83,61 +85,40 @@ defineEmits(["submit"]);
                     <InputError :message="$page.props.errors.patient_id" />
                 </div>
             </div>
-            <div class="p-1 grid grid-cols-1 gap-2">
+            <div class="">
                 <div
-                    class=""
+                    class="overflow-auto rounded-lg shadow p-4"
                     v-if="consultations.length != 0 || packages.length != 0"
                 >
                     <h3>Pagos pendientes del cliente :</h3>
-                    <table
-                        class="flex flex-row flex-no-wrap sm:bg-white rounded-lg sm:shadow-lg my-5 overflow-scroll"
-                    >
-                        <thead class="text-white">
-                            <tr
-                                class="bg-cyan-600 flex flex-col flex-no wrap sm:table-row rounded-l-lg sm:rounded-none mb-2 sm:mb-0"
-                            >
-                                <th class="p-3 text-center">Paciente</th>
-                                <th class="p-3 text-center">Fecha</th>
-                                <th class="p-3 text-center">Servicio</th>
-                                <th class="p-3 text-center">Monto Total</th>
-                                <th class="p-3 text-center">Monto Pagado</th>
-                                <th class="p-3 text-center">Monto a Pagar</th>
-                                <th class="p-3 text-center">Acciones</th>
+                    <table class="w-full protable">
+                        <thead>
+                            <tr class="text-center">
+                                <th>Paciente</th>
+                                <th>Fecha</th>
+                                <th>Servicio</th>
+                                <th>Monto Total</th>
+                                <th>Monto Pagado</th>
+                                <th>Monto a Pagar</th>
+                                <th>Acciones</th>
                             </tr>
                         </thead>
 
-                        <tbody
-                            v-for="(consultation, index) in consultations"
-                            class="flex-1 sm:flex-none"
-                        >
-                            <tr
-                                class="flex flex-col flex-no wrap sm:table-row mb-2 sm:mb-0"
-                            >
-                                <td
-                                    class="text-center border-grey-light border hover:bg-gray-100 p-3"
-                                >
+                        <tbody v-for="(consultation, index) in consultations">
+                            <tr class="divide-y divide-gray-400">
+                                <td>
                                     {{ consultation.patient }}
                                 </td>
-                                <td
-                                    class="text-center border-grey-light border hover:bg-gray-100 p-3"
-                                >
+                                <td>
                                     {{ changeFormat(consultation.date) }}
                                 </td>
-                                <td
-                                    class="text-center border-grey-light border hover:bg-gray-100 p-3 truncate"
-                                >
-                                    Consulta
-                                </td>
+                                <td>Consulta</td>
 
-                                <td
-                                    class="text-center border-grey-light border hover:bg-gray-100 p-3 truncate"
-                                >
+                                <td>
                                     {{ consultation.amount }}
                                 </td>
 
-                                <td
-                                    class="text-center border-grey-light border hover:bg-gray-100 p-3 truncate"
-                                >
+                                <td>
                                     {{
                                         consultation.amount_paid
                                             ? consultation.amount_paid
@@ -145,15 +126,11 @@ defineEmits(["submit"]);
                                     }}
                                 </td>
 
-                                <td
-                                    class="text-center border-grey-light border hover:bg-gray-100 p-3 truncate"
-                                >
+                                <td>
                                     {{ consultation.amount_payable }}
                                 </td>
 
-                                <td
-                                    class="text-center border-grey-light border hover:bg-gray-100 p-3 truncate"
-                                >
+                                <td>
                                     <input
                                         id="add-consultation"
                                         type="checkbox"
@@ -166,59 +143,40 @@ defineEmits(["submit"]);
                                                 index
                                             )
                                         "
-                                        class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                                        class=""
                                     />
                                 </td>
                             </tr>
                         </tbody>
 
-                        <tbody
-                            v-for="(packagep, index) in packages"
-                            class="flex-1 sm:flex-none"
-                        >
-                            <tr
-                                class="flex flex-col flex-no wrap sm:table-row mb-2 sm:mb-0"
-                            >
-                                <td
-                                    class="text-center border-grey-light border hover:bg-gray-100 p-3"
-                                >
+                        <tbody v-for="(packagep, index) in packages">
+                            <tr class="divide-y divide-gray-400">
+                                <td>
                                     {{ packagep.patient }}
                                 </td>
-                                <td
-                                    class="text-center border-grey-light border hover:bg-gray-100 p-3"
-                                >
+                                <td>
                                     {{ changeFormat(packagep.date) }}
                                 </td>
-                                <td
-                                    class="text-center border-grey-light border hover:bg-gray-100 p-3 truncate"
-                                >
+                                <td>
                                     {{ packagep.service_name }}
                                 </td>
 
-                                <td
-                                    class="text-center border-grey-light border hover:bg-gray-100 p-3 truncate"
-                                >
+                                <td>
                                     {{ packagep.price }}
                                 </td>
 
-                                <td
-                                    class="text-center border-grey-light border hover:bg-gray-100 p-3 truncate"
-                                >
+                                <td>
                                     {{
                                         packagep.amount_paid
                                             ? packagep.amount_paid
                                             : "0"
                                     }}
                                 </td>
-                                <td
-                                    class="text-center border-grey-light border hover:bg-gray-100 p-3 truncate"
-                                >
+                                <td>
                                     {{ packagep.amount_payable }}
                                 </td>
 
-                                <td
-                                    class="text-center border-grey-light border hover:bg-gray-100 p-3 truncate"
-                                >
+                                <td>
                                     <input
                                         id="add-consultation"
                                         type="checkbox"
@@ -231,33 +189,37 @@ defineEmits(["submit"]);
                                                 index
                                             )
                                         "
-                                        class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                                        class=""
                                     />
                                 </td>
                             </tr>
                         </tbody>
                     </table>
                 </div>
-                <div v-else>
-                    <h3 class="text-red-500">
-                        El paciente no tiene servicio pendiente por cancelar
-                    </h3>
+                <div v-if="msg_nolist != ''">
+                    <p class="lg:text-lg md:text-md sm:text-sm text-red-500">
+                        {{ msg_nolist }}
+                    </p>
                 </div>
             </div>
 
             <div
-                class="bg-cyan-600 text-white p-1 grid grid-cols-2 gap-2 rounded-md mb-10"
+                class="bg-gray-600 text-white p-1 gap-2 rounded-md my-5 grid"
                 v-if="form.amount > 0"
             >
                 <span class="rounded-xs p-2">
-                    Monto total a cancelar : {{ form.amount }}
+                    Monto total a cancelar :
+                    <span class="text-lg">S/. {{ form.amount }} </span>
                 </span>
                 <InputError :message="$page.props.errors.amount" />
             </div>
-            <h1>Agregar Pagos</h1>
-            <div class="bg-gray-50 rounded-lg p-1 grid grid-cols-1 gap-2">
-                <div class="p-1 grid grid-cols-2 gap-2">
+            <h1 class="text-gray-600">Pagos :</h1>
+            <div class="bg-gray-50 rounded-lg p-1">
+                <div
+                    class="p-1 grid gap-2 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-2"
+                >
                     <div class="rounded-lg">
+                        <InputLabel for="mop">Metodo de pago:</InputLabel>
                         <select
                             class="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
                             id="method_pay"
@@ -268,13 +230,13 @@ defineEmits(["submit"]);
                                 v-for="method in payment_methods"
                                 :value="method"
                             >
-                                {{ method.method_type.name }} ||
-                                {{ method.bank }}
+                                {{ method.name }}
                             </option>
                         </select>
                     </div>
 
                     <div class="">
+                        <InputLabel for="mp">Monto a pagar:</InputLabel>
                         <input
                             type="number"
                             class="bg-gray-100 border border-gray-300 text-gray-700 text-md rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
@@ -285,8 +247,11 @@ defineEmits(["submit"]);
                         />
                     </div>
                 </div>
-                <div class="p-1 grid grid-cols-2 gap-2">
+                <div
+                    class="p-1 grid gap-2 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-2"
+                >
                     <div class="">
+                        <InputLabel for="reference">Referencia:</InputLabel>
                         <input
                             type="text"
                             class="bg-gray-100 border border-gray-300 text-gray-700 text-md rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
@@ -296,6 +261,7 @@ defineEmits(["submit"]);
                         />
                     </div>
                     <div class="">
+                        <InputLabel for="cap">Comprobante:</InputLabel>
                         <input
                             class="w-full text-sm text-gray-600 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
                             aria-describedby="file_input_help"
@@ -312,9 +278,13 @@ defineEmits(["submit"]);
                     </div>
                 </div>
                 <div class="items-center content-center">
-                    <button type="button" @click="addParcialPayment()">
+                    <button
+                        type="button"
+                        @click="addParcialPayment()"
+                        class="w-full inline-flex mx-3 items-center justify-center w-1/2 px-3 py-2 text-sm font-medium text-center text-white rounded-lg bg-gray-800 hover:bg-gray-700 focus:ring-4 focus:ring-blue-300 sm:w-auto dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                    >
                         <svg
-                            class="h-6 w-6 text-cyan-500"
+                            class="h-6 w-6 text-white hover:text-white"
                             viewBox="0 0 24 24"
                             fill="none"
                             stroke="currentColor"
@@ -342,92 +312,83 @@ defineEmits(["submit"]);
             <div class="p-1 grid grid-cols-1 gap-2">
                 <div class="" v-if="datapay.length != 0">
                     <h3>Pagos Parciales :</h3>
-                    <table
-                        class="w-full flex flex-row flex-no-wrap sm:bg-white rounded-lg overflow-hidden sm:shadow-lg my-5"
-                    >
-                        <thead class="text-white">
-                            <tr
-                                class="bg-cyan-600 flex flex-col flex-no wrap sm:table-row rounded-l-lg sm:rounded-none mb-2 sm:mb-0"
+                    <div class="overflow-auto rounded-lg shadow p-4">
+                        <table class="w-full protable">
+                            <thead>
+                                <tr>
+                                    <th class="p-3 text-center">
+                                        Metodo de pago
+                                    </th>
+                                    <th class="p-3 text-center">Monto</th>
+                                    <th class="p-3 text-center">Referencias</th>
+                                    <th class="p-3 text-center">Comprobante</th>
+                                    <th class="p-3 text-center">Acciones</th>
+                                </tr>
+                            </thead>
+
+                            <tbody
+                                v-for="(data, index) in datapay"
+                                :key="index"
+                                class=""
                             >
-                                <th class="p-3 text-center">Metodo de pago</th>
-                                <th class="p-3 text-center">Monto</th>
-                                <th class="p-3 text-center">Referencias</th>
-                                <th class="p-3 text-center">Comprobante</th>
-                                <th class="p-3 text-center">Acciones</th>
-                            </tr>
-                        </thead>
+                                <tr>
+                                    <td>
+                                        {{ data.method_pay.method_type.name }}
+                                        |
+                                        {{ data.method_pay.name }}
+                                    </td>
+                                    <td>
+                                        {{ data.parcial_amount }}
+                                    </td>
+                                    <td>
+                                        {{
+                                            data.reference
+                                                ? data.reference
+                                                : "S/R"
+                                        }}
+                                    </td>
 
-                        <tbody
-                            v-for="(data, index) in datapay"
-                            :key="index"
-                            class="flex-1 sm:flex-none"
-                        >
-                            <tr
-                                class="flex flex-col flex-no wrap sm:table-row mb-2 sm:mb-0"
-                            >
-                                <td
-                                    class="text-center border-grey-light border hover:bg-gray-100 p-3"
-                                >
-                                    {{ data.method_pay.method_type.name }} ||
-                                    {{ data.method_pay.bank }}
-                                </td>
-                                <td
-                                    class="text-center border-grey-light border hover:bg-gray-100 p-3"
-                                >
-                                    {{ data.parcial_amount }}
-                                </td>
-                                <td
-                                    class="text-center border-grey-light border hover:bg-gray-100 p-3 truncate"
-                                >
-                                    {{
-                                        data.reference ? data.reference : "S/R"
-                                    }}
-                                </td>
+                                    <td>
+                                        {{
+                                            data.file_reference
+                                                ? data.file_reference.name
+                                                : "S/R"
+                                        }}
+                                    </td>
 
-                                <td
-                                    class="text-center border-grey-light border hover:bg-gray-100 p-3 truncate"
-                                >
-                                    {{
-                                        data.file_reference
-                                            ? data.file_reference.name
-                                            : "S/R"
-                                    }}
-                                </td>
-
-                                <td
-                                    class="text-center border-grey-light border hover:bg-gray-100 p-3 truncate"
-                                >
-                                    <button
-                                        type="button"
-                                        @click="deleteParcialPayment(index)"
-                                    >
-                                        <svg
-                                            class="h-6 w-6 text-red-700"
-                                            viewBox="0 0 24 24"
-                                            fill="none"
-                                            stroke="currentColor"
-                                            stroke-width="2"
-                                            stroke-linecap="round"
-                                            stroke-linejoin="round"
+                                    <td>
+                                        <button
+                                            type="button"
+                                            @click="deleteParcialPayment(index)"
                                         >
-                                            <line
-                                                x1="18"
-                                                y1="6"
-                                                x2="6"
-                                                y2="18"
-                                            />
-                                            <line
-                                                x1="6"
-                                                y1="6"
-                                                x2="18"
-                                                y2="18"
-                                            />
-                                        </svg>
-                                    </button>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
+                                            <svg
+                                                class="h-6 w-6 text-red-700"
+                                                viewBox="0 0 24 24"
+                                                fill="none"
+                                                stroke="currentColor"
+                                                stroke-width="2"
+                                                stroke-linecap="round"
+                                                stroke-linejoin="round"
+                                            >
+                                                <line
+                                                    x1="18"
+                                                    y1="6"
+                                                    x2="6"
+                                                    y2="18"
+                                                />
+                                                <line
+                                                    x1="6"
+                                                    y1="6"
+                                                    x2="18"
+                                                    y2="18"
+                                                />
+                                            </svg>
+                                        </button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
 
@@ -436,9 +397,11 @@ defineEmits(["submit"]);
                 id="addModal"
                 tabindex="-1"
                 v-show="addModal"
-                class="overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-modal md:h-full"
+                class="overflow-y-auto overflow-x-hidde fixed justify-center items-center w-full md:inset-0 h-modal md:h-full"
             >
-                <div class="relative p-4 w-full max-w-md h-full md:h-auto">
+                <div
+                    class="relative top-0 left-[40%] p-4 w-full max-w-md h-full md:h-auto"
+                >
                     <!-- Modal content -->
                     <div
                         class="relative p-4 text-center bg-white rounded-lg shadow dark:bg-gray-800 sm:p-5"
@@ -464,19 +427,26 @@ defineEmits(["submit"]);
                             </svg>
                             <span class="sr-only">Close modal</span>
                         </button>
+
                         <svg
-                            class="text-gray-400 dark:text-gray-500 w-11 h-11 mb-3.5 mx-auto"
-                            aria-hidden="true"
-                            fill="currentColor"
-                            viewBox="0 0 20 20"
-                            xmlns="http://www.w3.org/2000/svg"
+                            class="h-12 w-12 text-green-600 mx-auto"
+                            width="24"
+                            height="24"
+                            viewBox="0 0 24 24"
+                            stroke-width="2"
+                            stroke="currentColor"
+                            fill="none"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
                         >
+                            <path stroke="none" d="M0 0h24v24H0z" />
+                            <circle cx="12" cy="12" r="9" />
                             <path
-                                fill-rule="evenodd"
-                                d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z"
-                                clip-rule="evenodd"
-                            ></path>
+                                d="M14.8 9a2 2 0 0 0 -1.8 -1h-2a2 2 0 0 0 0 4h2a2 2 0 0 1 0 4h-2a2 2 0 0 1 -1.8 -1"
+                            />
+                            <path d="M12 6v2m0 8v2" />
                         </svg>
+
                         <p class="mb-4 text-gray-500 dark:text-gray-300">
                             Agrega un monto a pagar para este servicio
                         </p>
@@ -532,7 +502,7 @@ defineEmits(["submit"]);
                             <button
                                 type="button"
                                 @click="check(pending, checked, type, index)"
-                                class="py-2 px-3 text-sm font-medium text-center text-white bg-green-600 rounded-lg hover:bg-green-700 focus:ring-4 focus:outline-none focus:ring-green-300 dark:bg-green-500 dark:hover:bg-green-600 dark:focus:ring-green-900"
+                                class="py-2 px-3 text-sm font-medium text-center text-white bg-gray-800 rounded-lg hover:bg-gray-700 focus:ring-4 focus:outline-none focus:ring-green-300 dark:bg-green-500 dark:hover:bg-green-600 dark:focus:ring-green-900"
                             >
                                 Agregar
                             </button>
@@ -576,11 +546,12 @@ export default {
             payment_details: [],
             consultationsPendingList: [],
             packagesPendingList: [],
-            checked: "",
+
             band_consu: "consultation",
             band_pack: "packages",
             detail_band: "",
             msg_error: "",
+            msg_nolist: "",
 
             method_pay: "",
             parcial_amount: 0,
@@ -608,6 +579,9 @@ export default {
     methods: {
         search_consultations(patient_id) {
             let data = patient_id;
+            this.consultations = [];
+            this.packages = [];
+            this.form.amount = 0;
             router.visit("searchconsultation", {
                 method: "post",
                 data: {
@@ -654,6 +628,13 @@ export default {
                         this.packages.push(data);
                     });
                     this.paymentPendingList = [];
+                    if (
+                        this.packages.length == 0 &&
+                        this.consultations.length == 0
+                    ) {
+                        this.msg_nolist =
+                            "El paciente no tiene consultas o paquetes por cancelar.";
+                    }
                 },
                 onError: (errors) => {
                     console.log("erros");
@@ -910,5 +891,52 @@ td:not(:last-child) {
 
 th:not(:last-child) {
     border-bottom: 2px solid rgba(0, 0, 0, 0.1);
+}
+
+.protable thead {
+    background-color: #f1f5f9;
+}
+
+.protable thead tr th {
+    letter-spacing: 0.03em;
+    color: #475569;
+    font-size: 0.875rem;
+    line-height: 1.75rem;
+}
+
+.protable tbody tr {
+    background-color: #f8fafc;
+}
+
+.protable tbody tr td {
+    padding: 2px;
+    text-align: center;
+    color: #374151;
+    font-size: 1rem;
+    font-weight: 300;
+}
+
+@media (max-width: 770px) {
+    .protable thead tr th {
+        font-size: 0.85rem;
+        line-height: 1rem;
+    }
+
+    .protable tbody tr td {
+        font-size: 0.75rem;
+        font-weight: 300;
+    }
+}
+
+@media (max-width: 500px) {
+    .protable thead tr th {
+        font-size: 0.5rem;
+        line-height: 1rem;
+    }
+
+    .protable tbody tr td {
+        font-size: 0.5rem;
+        font-weight: 300;
+    }
 }
 </style>

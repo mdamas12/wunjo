@@ -34,10 +34,14 @@ Route::middleware([
     Route::resource('employees', EmployeeController::class); // rutas para empleados
     Route::resource('patients', PatientController::class); // rutas para Pacientes
     Route::resource('consultations', ConsultationController::class); // rutas para consultas
+    Route::post('/consultations/addevaluation', [ConsultationController::class, 'addevaluation'])->name('addevaluation');
+    Route::post('/consultations/process', [ConsultationController::class, 'process'])->name('process');
     Route::resource('packages', PackageController::class); // rutas para Paquetes de cliente
     Route::resource('payments', PaymentController::class); // rutas para pagos de cliente
+    Route::post('/payments/processpay', [PaymentController::class, 'processpay'])->name('processpay');
     Route::resource('payrolls', PayrollController::class); // rutas para pagos de empleados
     Route::resource('users', UserController::class); // rutas Usuarios
+    Route::post('users/searchuser', [UserController::class, 'searchuser'])->name('searchuser'); 
     
 });
 

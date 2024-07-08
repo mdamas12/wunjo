@@ -6,6 +6,7 @@ import SectionBorder from "@/Components/SectionBorder.vue";
 import TwoFactorAuthenticationForm from "@/Pages/Profile/Partials/TwoFactorAuthenticationForm.vue";
 import UpdatePasswordForm from "@/Pages/Profile/Partials/UpdatePasswordForm.vue";
 import UpdateProfileInformationForm from "@/Pages/Profile/Partials/UpdateProfileInformationForm.vue";
+import wjAppLayout from "@/Layouts/WunjoLayout.vue";
 
 defineProps({
     confirmsTwoFactorAuthentication: Boolean,
@@ -14,7 +15,7 @@ defineProps({
 </script>
 
 <template>
-    <AppLayout title="Profile">
+    <wjAppLayout title="Profile">
         <template #header>
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">
                 Perfil del usuario
@@ -22,7 +23,7 @@ defineProps({
         </template>
 
         <div>
-            <div class="max-w-7xl mx-auto py-10 sm:px-6 lg:px-8">
+            <div class="w-full mx-auto py-10 sm:px-6 lg:px-8">
                 <div v-if="$page.props.jetstream.canUpdateProfileInformation">
                     <UpdateProfileInformationForm
                         :user="$page.props.auth.user"
@@ -66,5 +67,5 @@ defineProps({
              -->
             </div>
         </div>
-    </AppLayout>
+    </wjAppLayout>
 </template>

@@ -14,7 +14,7 @@ class PatientController extends Controller
      */
     public function index()
     {
-        $patients = Patient::paginate(10);
+        $patients = Patient::paginate(5);
         return inertia('Patients/index',['patients' => $patients]);
     }
 

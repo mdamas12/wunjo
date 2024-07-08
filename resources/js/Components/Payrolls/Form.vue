@@ -186,8 +186,7 @@ defineEmits(["submit"]);
                             v-for="method in payment_methods"
                             :value="method"
                         >
-                            {{ method.method_type.name }} ||
-                            {{ method.bank }}
+                            {{ method.name }}
                         </option>
                     </select>
                 </div>
