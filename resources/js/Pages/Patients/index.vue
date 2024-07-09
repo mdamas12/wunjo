@@ -154,11 +154,16 @@ const deletePatient = (patient) => {
                                 A1
                             </th>
                             <th
+                                v-if="
+                                    $page.props.user['roles'] == 'supra' ||
+                                    $page.props.user['roles'] == 'administrator'
+                                "
                                 class="text-xs text-center wrap p-1 h-14 text-left md:text-xs md:w-10 lg:text-md"
                             >
                                 A2
                             </th>
                             <th
+                                v-if="$page.props.user['roles'] == 'supra'"
                                 class="text-xs text-center wrap p-1 h-14 text-left md:text-xs md:w-10 lg:text-md"
                             >
                                 A3
@@ -215,14 +220,13 @@ const deletePatient = (patient) => {
                                 </button>
                             </td>
                             <td
+                                v-if="
+                                    $page.props.user['roles'] == 'supra' ||
+                                    $page.props.user['roles'] == 'administrator'
+                                "
                                 class="text-xs text-center content-center wrap border-grey-light border hover:bg-gray-100 p-1 h-14 md:text-xs md:w-9 lg:text-md"
                             >
                                 <Link
-                                    v-if="
-                                        $page.props.user['roles'] == 'supra' ||
-                                        $page.props.user['roles'] ==
-                                            'administrator'
-                                    "
                                     :href="route('patients.edit', patient.id)"
                                     class="inline-flex text-md p-1 font-medium text-center text-white bg-yellow-500 rounded-lg hover:bg-yellow-700 focus:ring-4 focus:ring-red-300 dark:focus:ring-red-900"
                                 >
@@ -245,14 +249,10 @@ const deletePatient = (patient) => {
                                 </Link>
                             </td>
                             <td
+                                v-if="$page.props.user['roles'] == 'supra'"
                                 class="text-xs text-center content-center wrap border-grey-light border hover:bg-gray-100 p-1 h-14 md:text-xs md:w-9 lg:text-md"
                             >
                                 <button
-                                    v-if="
-                                        $page.props.user['roles'] == 'supra' ||
-                                        $page.props.user['roles'] ==
-                                            'administrator'
-                                    "
                                     @click="deletePatient(patient)"
                                     class="inline-flex items-center p-1 font-medium text-center text-white bg-red-600 rounded-lg hover:bg-red-800 focus:ring-4 focus:ring-red-300 dark:focus:ring-red-900"
                                 >

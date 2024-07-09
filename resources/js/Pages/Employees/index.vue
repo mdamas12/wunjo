@@ -151,11 +151,13 @@ const deleteEmployee = (id) => {
                                 A1
                             </th>
                             <th
+                                v-if="$page.props.user['roles'] == 'supra'"
                                 class="text-xs text-center wrap p-1 h-14 text-left md:text-xs md:w-10 lg:text-md"
                             >
                                 A2
                             </th>
                             <th
+                                v-if="$page.props.user['roles'] == 'supra'"
                                 class="text-xs text-center wrap p-1 h-14 text-left md:text-xs md:w-10 lg:text-md"
                             >
                                 A3
@@ -221,14 +223,10 @@ const deleteEmployee = (id) => {
                                 </button>
                             </td>
                             <td
+                                v-if="$page.props.user['roles'] == 'supra'"
                                 class="text-xs text-center content-center wrap border-grey-light border hover:bg-gray-100 p-1 h-14 md:text-xs md:w-9 lg:text-md"
                             >
                                 <Link
-                                    v-if="
-                                        $page.props.user['roles'] == 'supra' ||
-                                        $page.props.user['roles'] ==
-                                            'administrator'
-                                    "
                                     :href="route('employees.edit', employee.id)"
                                     class="inline-flex text-md p-1 font-medium text-center text-white bg-yellow-500 rounded-lg hover:bg-yellow-700 focus:ring-4 focus:ring-red-300 dark:focus:ring-red-900"
                                 >
@@ -250,14 +248,10 @@ const deleteEmployee = (id) => {
                                 </Link>
                             </td>
                             <td
+                                v-if="$page.props.user['roles'] == 'supra'"
                                 class="text-xs text-center content-center wrap border-grey-light border hover:bg-gray-100 p-1 h-14 md:text-xs md:w-9 lg:text-md"
                             >
                                 <button
-                                    v-if="
-                                        $page.props.user['roles'] == 'supra' ||
-                                        $page.props.user['roles'] ==
-                                            'administrator'
-                                    "
                                     @click="deleteEmployee(employee.id)"
                                     type="button"
                                     class="inline-flex items-center p-1 font-medium text-center text-white bg-red-600 rounded-lg hover:bg-red-800 focus:ring-4 focus:ring-red-300 dark:focus:ring-red-900"
@@ -455,7 +449,7 @@ const deleteEmployee = (id) => {
                         <p
                             class="text-base leading-relaxed text-gray-500 dark:text-gray-400"
                         >
-                            {{ data.phone }}
+                            {{ data.mount }}
                         </p>
                     </div>
 

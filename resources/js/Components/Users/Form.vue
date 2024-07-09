@@ -289,6 +289,7 @@ export default {
                     alert("La contraseña y su confirmacion deben de coincidir");
                     return;
                 }
+                return this.$emit("submit");
             } else {
                 return this.$emit("submit");
             }

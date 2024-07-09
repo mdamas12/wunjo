@@ -337,22 +337,14 @@ const logout = () => {
                                 </div>
 
                                 <DropdownLink
-                                    v-if="
-                                        $page.props.user.permissions.includes(
-                                            'read_branch'
-                                        )
-                                    "
+                                    v-if="$page.props.user['roles'] == 'supra'"
                                     :href="route('branches.index')"
                                     :active="route().current('branches.*')"
                                 >
                                     Sedes
                                 </DropdownLink>
                                 <DropdownLink
-                                    v-if="
-                                        $page.props.user.permissions.includes(
-                                            'read_service'
-                                        )
-                                    "
+                                    v-if="$page.props.user['roles'] == 'supra'"
                                     :href="route('services.index')"
                                     :active="route().current('services.*')"
                                 >
