@@ -90,7 +90,10 @@ class ConsultationController extends Controller
     public function edit(Consultation $consultation)
     {
         $patients = Patient::all();
-        $employees = Employee::all();
+        $employees = DB::select("SELECT * FROM employees E 
+                                    INNER JOIN positions P ON E.position_id = P.id 
+                                    WHERE E.status = 'true' 
+                                    AND P.type = 'area'");
         $branches = Userbranch::with('branch')->where('user_id',auth()->user()->id)->get();
 
         $consultation->load('branch');
