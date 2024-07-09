@@ -1,9 +1,3 @@
-<script>
-export default {
-    name: "ConsultationsForm",
-};
-</script>
-
 <script setup>
 import FormSection from "@/Components/FormSection.vue";
 import InputError from "@/Components/InputError.vue";
@@ -147,6 +141,7 @@ defineEmits(["submit"]);
                     class="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
                     id="position_id"
                     v-model="form.employee_id"
+                    @change="prueba(form.employee_id)"
                 >
                     <option v-for="employee in employees" :value="employee.id">
                         {{ employee.fist_name }} {{ employee.last_name }}
@@ -207,3 +202,20 @@ defineEmits(["submit"]);
         </template>
     </FormSection>
 </template>
+
+<script>
+export default {
+    name: "ConsultationsForm",
+
+    data() {
+        return {};
+    },
+
+    methods: {
+        prueba(empleado) {
+            console.log(empleado);
+            return;
+        },
+    },
+};
+</script>
