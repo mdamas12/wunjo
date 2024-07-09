@@ -409,16 +409,16 @@ const StatusConsultation = (consultation) => {
             </div>
             <!-- PAGINAIION-->
             <div
-                class="bottom-0 right-0 items-center w-full p-4 bg-white border-t border-gray-200 sm:flex sm:justify-between"
+                class="text-gray-800 bottom-0 right-0 items-center w-full p-4 bg-white border-t border-gray-200 sm:flex sm:justify-between"
             >
-                <div class="flex items-center mb-4 sm:mb-0">
+                <div class="text-gray-800 flex items-center mb-4 sm:mb-0">
                     <Link
                         v-if="consultations.current_page > 1"
                         :href="consultations.prev_page_url"
-                        class="inline-flex justify-center p-1 text-gray-500 rounded cursor-pointer hover:text-gray-900 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+                        class="inline-flex justify-center p-1 text-gray-500 rounded cursor-pointer hover:text-gray-900 hover:bg-gray-100"
                     >
                         <svg
-                            class="w-7 h-7"
+                            class="w-7 h-7 text-gray-80"
                             fill="currentColor"
                             viewBox="0 0 20 20"
                             xmlns="http://www.w3.org/2000/svg"
@@ -435,10 +435,10 @@ const StatusConsultation = (consultation) => {
                             consultations.current_page < consultations.last_page
                         "
                         :href="consultations.next_page_url"
-                        class="inline-flex justify-center p-1 mr-2 text-gray-500 rounded cursor-pointer hover:text-gray-900 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+                        class="inline-flex justify-center p-1 mr-2 text-gray-500 rounded cursor-pointer hover:text-gray-900 hover:bg-gray-100"
                     >
                         <svg
-                            class="w-7 h-7"
+                            class="w-7 h-7 text-gray-80"
                             fill="currentColor"
                             viewBox="0 0 20 20"
                             xmlns="http://www.w3.org/2000/svg"
@@ -450,20 +450,17 @@ const StatusConsultation = (consultation) => {
                             ></path>
                         </svg>
                     </Link>
-                    <span
-                        class="text-sm font-normal text-gray-500 dark:text-gray-400"
+                    <span class="text-sm font-normal text-gray-600"
                         >Mostrando
-                        <span
-                            class="font-semibold text-gray-900 dark:text-white"
+                        <span class="font-semibold text-gray-800"
                             >{{ consultations.from }}-{{
                                 consultations.to
                             }}</span
                         >
                         De
-                        <span
-                            class="font-semibold text-gray-900 dark:text-white"
-                            >{{ consultations.total }}</span
-                        ></span
+                        <span class="font-semibold text-gray-800">{{
+                            consultations.total
+                        }}</span></span
                     >
                 </div>
             </div>

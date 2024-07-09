@@ -312,16 +312,16 @@ const deletepayment = (payment) => {
                 </table>
                 <!-- PAGINAIION-->
                 <div
-                    class="bottom-0 right-0 items-center w-full p-4 bg-white border-t border-gray-200 sm:flex sm:justify-between"
+                    class="bottom-0 right-0 items-center w-full p-4 bg-white border-t border-gray-200 sm:flex sm:justify-between text-gray-800"
                 >
-                    <div class="flex items-center mb-4 sm:mb-0">
+                    <div class="text-gray-800 flex items-center mb-4 sm:mb-0">
                         <Link
                             v-if="payments.current_page > 1"
                             :href="payments.prev_page_url"
-                            class="inline-flex justify-center p-1 text-gray-500 rounded cursor-pointer hover:text-gray-900 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-700"
+                            class="text-gray-800 inline-flex justify-center p-1 text-gray-500 rounded cursor-pointer hover:text-gray-900 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-700"
                         >
                             <svg
-                                class="w-7 h-7"
+                                class="w-7 h-7 text-gray-800"
                                 fill="currentColor"
                                 viewBox="0 0 20 20"
                                 xmlns="http://www.w3.org/2000/svg"
@@ -336,10 +336,10 @@ const deletepayment = (payment) => {
                         <Link
                             v-if="payments.current_page < payments.last_page"
                             :href="payments.next_page_url"
-                            class="inline-flex justify-center p-1 mr-2 text-gray-500 rounded cursor-pointer hover:text-gray-900 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-700"
+                            class="text-gray-800 inline-flex justify-center p-1 mr-2 text-gray-500 rounded cursor-pointer hover:text-gray-900 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-700"
                         >
                             <svg
-                                class="w-7 h-7"
+                                class="w-7 h-7 text-gray-800"
                                 fill="currentColor"
                                 viewBox="0 0 20 20"
                                 xmlns="http://www.w3.org/2000/svg"
