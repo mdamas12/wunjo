@@ -50,10 +50,10 @@ class ConsultationController extends Controller
         $patients = Patient::all();
         //$employees = Employee::where();
 
-        $employees = DB::select("SELECT e.id, e.fist_name, e.last_name FROM employees E 
-                                INNER JOIN positions P ON E.position_id = P.id 
-                                WHERE E.status = 'true' 
-                                AND P.type = 'area'");
+        $employees = DB::select("SELECT e.id, e.fist_name, e.last_name FROM employees e 
+                                INNER JOIN positions p ON e.position_id = p.id 
+                                WHERE e.status = 'true' 
+                                AND p.type = 'area'");
 
         $branches = Userbranch::with('branch')->where('user_id',auth()->user()->id)->get();
         //dd($branches);
@@ -90,10 +90,10 @@ class ConsultationController extends Controller
     public function edit(Consultation $consultation)
     {
         $patients = Patient::all();
-        $employees = DB::select("SELECT e.id, e.fist_name, e.last_name FROM employees E 
-                                    INNER JOIN positions P ON E.position_id = P.id 
-                                    WHERE E.status = 'true' 
-                                    AND P.type = 'area'");
+        $employees = DB::select("SELECT e.id, e.fist_name, e.last_name FROM employees e 
+        INNER JOIN positions p ON e.position_id = p.id 
+        WHERE e.status = 'true' 
+        AND p.type = 'area'");
         $branches = Userbranch::with('branch')->where('user_id',auth()->user()->id)->get();
 
         $consultation->load('branch');
