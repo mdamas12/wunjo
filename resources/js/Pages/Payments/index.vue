@@ -318,7 +318,7 @@ const deletepayment = (payment) => {
                         <Link
                             v-if="payments.current_page > 1"
                             :href="payments.prev_page_url"
-                            class="inline-flex justify-center p-1 text-gray-500 rounded cursor-pointer hover:text-gray-900 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+                            class="inline-flex justify-center p-1 text-gray-500 rounded cursor-pointer hover:text-gray-900 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-700"
                         >
                             <svg
                                 class="w-7 h-7"
@@ -336,7 +336,7 @@ const deletepayment = (payment) => {
                         <Link
                             v-if="payments.current_page < payments.last_page"
                             :href="payments.next_page_url"
-                            class="inline-flex justify-center p-1 mr-2 text-gray-500 rounded cursor-pointer hover:text-gray-900 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+                            class="inline-flex justify-center p-1 mr-2 text-gray-500 rounded cursor-pointer hover:text-gray-900 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-700"
                         >
                             <svg
                                 class="w-7 h-7"
@@ -351,18 +351,15 @@ const deletepayment = (payment) => {
                                 ></path>
                             </svg>
                         </Link>
-                        <span
-                            class="text-sm font-normal text-gray-500 dark:text-gray-400"
+                        <span class="text-sm font-normal text-gray-500"
                             >Mostrando
-                            <span
-                                class="font-semibold text-gray-900 dark:text-white"
+                            <span class="font-semibold text-gray-900"
                                 >{{ payments.from }}-{{ payments.to }}</span
                             >
                             De
-                            <span
-                                class="font-semibold text-gray-900 dark:text-white"
-                                >{{ payments.total }}</span
-                            ></span
+                            <span class="font-semibold text-gray-900">{{
+                                payments.total
+                            }}</span></span
                         >
                     </div>
                 </div>

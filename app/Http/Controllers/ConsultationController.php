@@ -31,6 +31,7 @@ class ConsultationController extends Controller
         $branches_user = Userbranch::where('user_id',auth()->user()->id)->get();
         $consultations = Consultation::with('branch','patient','employee')
                   ->where('status','<>','DELETED')
+                  ->orderBy('date', 'DESC')
                   ->where(function ($query) use($branches_user) {
                    foreach($branches_user as $key) {
                     $branch_id = $key['branch_id'];
