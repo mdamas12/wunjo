@@ -411,23 +411,28 @@ class ConsultationController extends Controller
         
         if ($request->filter == "patient"){
               
-                $searchlist =  Consultation::with('branch','patient','employee')->select('*')
+                $searchlist =  Consultation::with('branch','patient','employee')->select('consultations.id','consultations.branch_id','consultations.patient_id','consultations.employee_id','consultations.evaluation','consultations.diagnostic','consultations.date','consultations.hour','consultations.status')
                 ->join('patients', 'patients.id', '=', 'consultations.patient_id')
+                ->where('consultations.status','<>','DELETED')
                 ->where('patients.fist_name', 'LIKE',  '%'.$first_name.'%')
                 ->where('patients.last_name', 'LIKE',  '%'.$last_name.'%')
                 ->paginate(10);  
             }
     
         if ($request->filter == "employee"){
-                $searchlist =  Consultation::with('branch','patient','employee')->select('*')
+                $searchlist =  Consultation::with('branch','patient','employee')->select('consultations.id','consultations.branch_id','consultations.patient_id','consultations.employee_id','consultations.evaluation','consultations.diagnostic','consultations.date','consultations.hour','consultations.status')
                 ->join('employees', 'employees.id', '=', 'consultations.employee_id')
+                ->where('consultations.status','<>','DELETED')
                 ->where('employees.fist_name', 'LIKE',  '%'.$first_name.'%')
                 ->where('employees.last_name', 'LIKE',  '%'.$last_name.'%')
                 ->paginate(10);  
             }
 
         if ($request->filter == "date"){
-                $searchlist = Consultation::with('branch','patient','employee')->where('date',$request->search)->orderBy('created_at', 'DESC')->paginate(10);
+                $searchlist = Consultation::with('branch','patient','employee')
+                ->where('date',$request->search)
+                ->where('consultations.status','<>','DELETED')
+                ->orderBy('created_at', 'DESC')->paginate(10);
 
             }
 
