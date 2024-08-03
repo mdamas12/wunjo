@@ -33,13 +33,26 @@ Route::middleware([
     Route::resource('promotions', PromotionController::class); // rutas para promociones o paquetes 
     Route::resource('employees', EmployeeController::class); // rutas para empleados
     Route::resource('patients', PatientController::class); // rutas para Pacientes
+
     Route::resource('consultations', ConsultationController::class); // rutas para consultas
     Route::post('/consultations/addevaluation', [ConsultationController::class, 'addevaluation'])->name('addevaluation');
     Route::post('/consultations/process', [ConsultationController::class, 'process'])->name('process');
+    Route::post('/consultations/searchp', [ConsultationController::class, 'searchp'])->name('searchp'); 
+    Route::post('/consultations/savepatient', [ConsultationController::class, 'savepatient'])->name('savepatient');
+    Route::post('/consultations/filtersearch', [ConsultationController::class, 'filtersearch'])->name('filtersearch');
+
     Route::resource('packages', PackageController::class); // rutas para Paquetes de cliente
+
+   /*
+   * Payments 
+   */
     Route::resource('payments', PaymentController::class); // rutas para pagos de cliente
+    Route::post('/payments/paymentsearch', [PaymentController::class, 'paymentsearch'])->name('paymentsearch');
     Route::post('/payments/processpay', [PaymentController::class, 'processpay'])->name('processpay');
+
+
     Route::resource('payrolls', PayrollController::class); // rutas para pagos de empleados
+    Route::post('/payrolls/payrollsearch', [PayrollController::class, 'payrollsearch'])->name('payrollsearch');
     Route::resource('users', UserController::class); // rutas Usuarios
     Route::post('users/searchuser', [UserController::class, 'searchuser'])->name('searchuser'); 
     
@@ -56,7 +69,7 @@ Route::post('/consultations/deletedetail', [ConsultationController::class, 'dele
 Route::post('/consultations/loadservices', [ConsultationController::class, 'loadservices'])->name('loadservices');
 Route::post('/consultations/loadpackages', [ConsultationController::class, 'loadpackages'])->name('loadpackages');  
 Route::post('/consultations/savedetail', [ConsultationController::class, 'savedetail'])->name('savedetail');
-Route::post('/consultations/changestatus', [ConsultationController::class, 'change_status'])->name('changestatus');
+Route::post('/consultations/changestatus', [ConsultationController::class, 'change_status'])->name('changestatus'); 
 
 Route::post('/packages/changestatus', [PackageController::class, 'change_status'])->name('changestatuspackage');
 Route::post('/payments/searchconsultation', [PaymentController::class, 'search_consultation'])->name('searchconsultation');

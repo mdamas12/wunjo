@@ -4,11 +4,12 @@ import wjAppLayout from "@/Layouts/WunjoLayout.vue";
 import { useForm } from "@inertiajs/vue3";
 import { Link } from "@inertiajs/vue3";
 import { Inertia } from "@inertiajs/inertia";
+import { router } from "@inertiajs/vue3";
 
 import ConsultationForm from "@/Components/Branches/Form.vue";
 
 defineProps({
-    consultations: {
+    consultations_all: {
         type: Object,
         required: true,
     },
@@ -79,13 +80,12 @@ const StatusConsultation = (consultation) => {
                                     <label class="sr-only">Search</label>
                                     <div class="relative mt-1 lg:w-64 xl:w-96">
                                         <input
-                                            v-on:keyup.enter="goTosearch()"
                                             type="text"
                                             name="user"
                                             id="patient-search"
-                                            v-model="patient"
+                                            v-model="search"
                                             class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                                            placeholder="Busqueda por paciente"
+                                            placeholder="Busqueda"
                                         />
                                     </div>
                                 </div>
@@ -93,38 +93,30 @@ const StatusConsultation = (consultation) => {
                                     class="flex pl-0 mt-3 space-x-1 sm:pl-2 sm:mt-0"
                                 >
                                     <button
-                                        @click="goTosearch()"
-                                        class="inline-flex justify-center p-1 text-gray-500 rounded cursor-pointer hover:text-gray-900 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+                                        @click="goTosearch('patient')"
+                                        class="inline-flex justify-center border p-2 text-gray-500 rounded cursor-pointer hover:text-gray-900 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
                                     >
-                                        <svg
-                                            class="h-8 w-8 text-gray-500"
-                                            viewBox="0 0 24 24"
-                                            fill="none"
-                                            stroke="currentColor"
-                                            stroke-width="2"
-                                            stroke-linecap="round"
-                                            stroke-linejoin="round"
-                                        >
-                                            <circle cx="11" cy="11" r="8" />
-                                            <line
-                                                x1="21"
-                                                y1="21"
-                                                x2="16.65"
-                                                y2="16.65"
-                                            />
-                                            <line
-                                                x1="11"
-                                                y1="8"
-                                                x2="11"
-                                                y2="14"
-                                            />
-                                            <line
-                                                x1="8"
-                                                y1="11"
-                                                x2="14"
-                                                y2="11"
-                                            />
-                                        </svg>
+                                        Paciente
+                                    </button>
+                                </div>
+                                <div
+                                    class="flex pl-0 mt-3 space-x-1 sm:pl-2 sm:mt-0"
+                                >
+                                    <button
+                                        @click="goTosearch('employee')"
+                                        class="inline-flex justify-center border p-2 text-gray-500 rounded cursor-pointer hover:text-gray-900 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+                                    >
+                                        Empleado
+                                    </button>
+                                </div>
+                                <div
+                                    class="flex pl-0 mt-3 space-x-1 sm:pl-2 sm:mt-0"
+                                >
+                                    <button
+                                        @click="goTosearch('date')"
+                                        class="inline-flex justify-center border p-2 text-gray-500 rounded cursor-pointer hover:text-gray-900 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+                                    >
+                                        Fecha
                                     </button>
                                 </div>
                             </div>
@@ -288,7 +280,7 @@ const StatusConsultation = (consultation) => {
                                         v-if="
                                             consultation.status == 'PENDIENTE'
                                         "
-                                        class="h-8 w-8 text-red-700"
+                                        class="h-7 w-7 text-red-700"
                                         viewBox="0 0 24 24"
                                         fill="none"
                                         stroke="currentColor"
@@ -621,6 +613,8 @@ export default {
             modalDetail: false,
             data: [],
             position_name: "",
+            search: "",
+            consultations: [],
         };
     },
 
@@ -629,17 +623,7 @@ export default {
     },
 
     async mounted() {
-        // console.log("si, esta haciendo la montada");
-        /*  router.get(
-            route("consultationslist")
-                .then((res) => {
-                    // Update the form data with the fetched data
-                    console.log(res);
-                })
-                .catch((error) => {
-                    observer.error(error);
-                })
-        );*/
+        this.consultations = this.consultations_all;
     },
 
     methods: {
@@ -658,8 +642,43 @@ export default {
             let newdate = date.split("-");
             return newdate[2] + "/" + newdate[1] + "/" + newdate[0];
         },
-        goTosearch() {
-            alert("Accion no valida!");
+        goTosearch(filter) {
+            // alert(filter);
+            let data_search = this.search;
+
+            if (filter == "date") {
+                let date = data_search.split("/");
+                if (date.length <= 1) {
+                    alert(
+                        "Debes escribir un formato de fecha dd/mm/AAAA, ejemplo: 01/03/2024"
+                    );
+                    return;
+                } else {
+                    data_search = date[2] + "-" + date[1] + "-" + date[0];
+                }
+            }
+
+            router.visit("consultations/filtersearch", {
+                method: "post",
+                data: {
+                    search: data_search,
+                    filter: filter,
+                },
+                preserveState: true,
+                preserveScroll: true,
+
+                onSuccess: (resp) => {
+                    //this.consultations = resp.props.jetstream.flash.listsearch;
+                    let listsearch = resp.props.jetstream.flash.listsearch;
+                    this.consultations = listsearch;
+                    // console.log(listsearch);
+                    return;
+                },
+                onError: (errors) => {
+                    console.log("erros");
+                    return;
+                },
+            });
         },
     },
 };

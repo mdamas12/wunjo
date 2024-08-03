@@ -24,9 +24,9 @@ class PaymentController extends Controller
      */
     public function index()
     {
-        $payments = Payment::where('status','<>','DELETED')->orderBy('created_at', 'DESC')->paginate(10);
+        $payments = Payment::where('status','<>','DELETED')->orderBy('date', 'DESC')->paginate(10);
         $payments->load('patient');
-        return inertia('Payments/index',['payments' => $payments]);
+        return inertia('Payments/index',['payments_all' => $payments]);
     }
 
     /**
@@ -292,6 +292,56 @@ class PaymentController extends Controller
 
         }
         return redirect()->back();
+     }
+
+
+     public function paymentsearch(Request $request){
+
+  
+
+        /**
+         * metodo para observar la consulta sql de eloquent
+         *  DB::enableQueryLog();  activa el log
+         *  dd(DB::getQueryLog()); muestra la consulta
+         */
+
+       
+        if ($request->filter == "patient"){
+            $first_name = "";
+            $last_name = "";
+            $search = explode(" ", $request->search);
+            if (count($search) == 3 ){
+                $first_name = $search[0]." ".$search[1];
+                $last_name = $search[2];
+            }
+            if (count($search) == 2 ){
+                $first_name = $search[0];
+                $last_name = $search[1];
+            }
+            if (count($search) == 1 ){
+                $first_name = $search[0];
+            }
+
+        }
+  
+        if ($request->filter == "patient"){
+              
+                $searchlist =  Payment::with('patient')->select('payments.id', 'payments.patient_id','payments.date', 'payments.amount', 'payments.status')
+                ->join('patients', 'patients.id', '=', 'payments.patient_id')
+                ->where('patients.fist_name', 'LIKE',  '%'.$first_name.'%')
+                ->where('patients.last_name', 'LIKE',  '%'.$last_name.'%')
+                ->paginate(10);  
+            }
+    
+
+        if ($request->filter == "date"){
+                $searchlist = Payment::with('patient')->where('date',$request->search)->orderBy('created_at', 'DESC')->paginate(10);
+
+            }
+
+            session()->flash('flash.listsearch', $searchlist);
+            return redirect()->back();
+
      }
 
 

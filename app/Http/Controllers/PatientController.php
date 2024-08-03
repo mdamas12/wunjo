@@ -29,11 +29,22 @@ class PatientController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(PatientRequest $request)
+    public function store(Request $request)
     {
-        Patient::create($request->validated());
-        $patients = Patient::paginate(10);
-        return inertia('Patients/index',['patients' => $patients])->with('success_message', 'Paciente creado satisfactoriamente');;
+
+
+        $newPatient =   Patient::create([
+            'fist_name' => $request->fist_name,
+            'last_name' => $request->last_name,    
+            'identification' => $request->identification,
+            'phone' => $request->phone,
+            'email' => $request->email,
+            'address' => $request->address,
+            'status' => $request->status,
+
+        ]);
+
+        return redirect()->route('patients.index');
     
     }
 

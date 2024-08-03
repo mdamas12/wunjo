@@ -60,9 +60,7 @@ defineEmits(["submit"]);
                     v-model="form.identification"
                     id="identification"
                     placeholder="identificacion del paciente"
-                    required=""
                 />
-                <InputError :message="$page.props.errors.identification" />
             </div>
             <div class="col-span-6">
                 <InputLabel for="name">Telefono</InputLabel>
@@ -72,9 +70,7 @@ defineEmits(["submit"]);
                     v-model="form.phone"
                     id="phone"
                     placeholder="Numero de telefono"
-                    required=""
                 />
-                <InputError :message="$page.props.errors.phone" />
             </div>
 
             <div class="col-span-6">
@@ -85,9 +81,7 @@ defineEmits(["submit"]);
                     v-model="form.email"
                     id="email"
                     placeholder="Email del paciente"
-                    required=""
                 />
-                <InputError :message="$page.props.errors.email" />
             </div>
             <div class="col-span-6">
                 <InputLabel for="name">Direccion</InputLabel>
@@ -97,12 +91,10 @@ defineEmits(["submit"]);
                     v-model="form.address"
                     id="address"
                     placeholder="Direccion del paciente"
-                    required=""
                 />
-                <InputError :message="$page.props.errors.address" />
             </div>
 
-            <div class="col-span-6">
+            <div class="col-span-6" v-if="updating == true">
                 <InputLabel for="status">Status</InputLabel>
                 <select
                     id="status"
@@ -113,6 +105,7 @@ defineEmits(["submit"]);
                     <option value="true">Activo</option>
                     <option value="false">Inactivo</option>
                 </select>
+
                 <InputError :message="$page.props.errors.status" />
             </div>
         </template>
@@ -133,7 +126,7 @@ defineEmits(["submit"]);
                         clip-rule="evenodd"
                     ></path>
                 </svg>
-                {{ updating ? "Actualizar" : "Crear Nueva" }}
+                {{ updating ? "Actualizar" : "Crear Nuevo" }}
             </PrimaryButton>
         </template>
     </FormSection>

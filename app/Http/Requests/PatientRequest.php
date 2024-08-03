@@ -25,22 +25,15 @@ class PatientRequest extends FormRequest
         return [
             'fist_name' => ['required','string','max:30'],
             'last_name' => ['required','string','max:30'],
-            'identification' => ['required','string','max:30',  Rule::unique(table: 'patients', column: 'identification')->ignore(id:request('patient'), idColumn: 'id')],
-            'phone' => ['required','string','max:30'],
-            'email' => ['required','email'],
-            'address' => ['required','string','max:150'],
-            'status' => ['required'],
+            //'identification' => ['required','string','max:30',  Rule::unique(table: 'patients', column: 'identification')->ignore(id:request('patient'), idColumn: 'id')],
+            //'phone' => ['required','string','max:30'],
+            //'email' => ['required','email'],
+           // 'address' => ['required','string','max:150'],
+           // 'status' => ['required'],
             
         
         ];
     }
 
-    public function messages():array{
-
-        return[
-           'identification.required' => __('Debes agregar un numero de identificacion'),
-           'identification.unique' => __('Esta identificacion ya esta registrada'),
-        ];
-
-    }
+  
 }

@@ -39,7 +39,7 @@ class ConsultationController extends Controller
                     
                    }
                 })->paginate(10);
-        return inertia('Consultations/index',['consultations' => $consultations]);
+        return inertia('Consultations/index',['consultations_all' => $consultations]);
     }
 
     /**
@@ -65,8 +65,9 @@ class ConsultationController extends Controller
      */
     public function store(ConsultationRequest $request)
     {
+     
         Consultation::create($request->validated());
-        return redirect()->route('consultations.index')->with('success_message', 'Consulta creada satisfactoriamente');
+        return redirect()->route('consultations.index');
     }
 
     /**
@@ -147,7 +148,7 @@ class ConsultationController extends Controller
 
 
   /**
-   * LISTA DE SERVICIOS QUIE AUN NO ESTAN EN LA CONSULTA SOLICITADA
+   * LISTA DE SERVICIOS QUE AUN NO ESTAN EN LA CONSULTA SOLICITADA
    */
     public function loadservices(request $request){
 
@@ -340,6 +341,99 @@ class ConsultationController extends Controller
 
         }
         return redirect()->back();
+     }
+
+     public function searchp(Request $request){
+        if ($request->lastname == ""){
+            $patients = Patient::where('fist_name','LIKE', "%$request->fist_name%")->orderBy('fist_name', 'asc')->get();
+      
+
+        }
+        else {
+            $patients = Patient::where('fist_name','LIKE', "%$request->fist_name%")->orWhere('last_name','LIKE', "%$request->last_name%")->orderBy('fist_name', 'asc')->get();
+           
+        }
+     
+        session()->flash('flash.patients', $patients);
+        return redirect()->back();
+     }
+
+     public function savepatient(Request $request){
+       
+        $newpatient =   Patient::create([
+            'fist_name' => $request->fist_name,
+            'last_name' => $request->last_name,
+            'identification' => $request->identification,
+            'phone' => $request->phone,
+            'email' => $request->email,
+            'address' => $request->address,
+            'status' => 'true'
+        ]);
+
+        session()->flash('flash.patientnew', $newpatient);
+
+        return redirect()->back();
+
+     } 
+
+     /**
+      * filtro de busqueda en el index
+      */
+
+     public function filtersearch(Request $request){
+
+        /**
+         * metodo para observar la consulta sql de eloquent
+         *  DB::enableQueryLog();  activa el log
+         *  dd(DB::getQueryLog()); muestra la consulta
+         */
+
+       
+        if (($request->filter == "patient") || ($request->filter == "employee" )){
+            $first_name = "";
+            $last_name = "";
+            $search = explode(" ", $request->search);
+            if (count($search) == 3 ){
+                $first_name = $search[0]." ".$search[1];
+                $last_name = $search[2];
+            }
+            if (count($search) == 2 ){
+                $first_name = $search[0];
+                $last_name = $search[1];
+            }
+            if (count($search) == 1 ){
+                $first_name = $search[0];
+            }
+
+        }
+
+
+        
+        if ($request->filter == "patient"){
+              
+                $searchlist =  Consultation::with('branch','patient','employee')->select('*')
+                ->join('patients', 'patients.id', '=', 'consultations.patient_id')
+                ->where('patients.fist_name', 'LIKE',  '%'.$first_name.'%')
+                ->where('patients.last_name', 'LIKE',  '%'.$last_name.'%')
+                ->paginate(10);  
+            }
+    
+        if ($request->filter == "employee"){
+                $searchlist =  Consultation::with('branch','patient','employee')->select('*')
+                ->join('employees', 'employees.id', '=', 'consultations.employee_id')
+                ->where('employees.fist_name', 'LIKE',  '%'.$first_name.'%')
+                ->where('employees.last_name', 'LIKE',  '%'.$last_name.'%')
+                ->paginate(10);  
+            }
+
+        if ($request->filter == "date"){
+                $searchlist = Consultation::with('branch','patient','employee')->where('date',$request->search)->orderBy('created_at', 'DESC')->paginate(10);
+
+            }
+
+            session()->flash('flash.listsearch', $searchlist);
+            return redirect()->back();
+
      }
 
 }

@@ -184,13 +184,21 @@ const deletePatient = (patient) => {
                             <td
                                 class="text-xs text-center wrap border-grey-light border p-3 h-14 md:text-xs lg:text-md"
                             >
-                                {{ splitemail(patient.email) }}
+                                {{
+                                    patient.email != null
+                                        ? splitemail(patient.email)
+                                        : "S/EMAIL"
+                                }}
                             </td>
 
                             <td
                                 class="text-xs text-center wrap border-grey-light border p-3 h-14 md:text-xs lg:text-md"
                             >
-                                {{ patient.phone }}
+                                {{
+                                    patient.phone != null
+                                        ? patient.phone
+                                        : "S/NUMERO"
+                                }}
                             </td>
 
                             <td
@@ -453,6 +461,7 @@ export default {
     data() {
         return {
             modalDetail: false,
+            patient: "",
             data: [],
         };
     },

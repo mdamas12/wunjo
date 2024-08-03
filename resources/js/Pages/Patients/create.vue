@@ -16,9 +16,9 @@ const form = useForm({
     last_name: "",
     identification: "",
     phone: "",
-    email: "",
+    email: "marcosdamas@hotmail.com",
     address: "",
-    status: false,
+    status: "true",
 });
 </script>
 

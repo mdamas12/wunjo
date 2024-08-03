@@ -23,7 +23,7 @@ class PayrollController extends Controller
     public function index()
     {
         $payrolls = Payroll::with('employee')->where('status','<>',false)->orderBy('created_at', 'DESC')->paginate(10);
-        return inertia('Payrolls/index',['payrolls' => $payrolls]);
+        return inertia('Payrolls/index',['payrolls_all' => $payrolls]);
     }
 
     /**
@@ -150,5 +150,55 @@ class PayrollController extends Controller
         session()->flash('flash.consultations', $consultations);
         return redirect()->back();
     }
+
+
+    public function payrollsearch(Request $request){
+
+  
+
+        /**
+         * metodo para observar la consulta sql de eloquent
+         *  DB::enableQueryLog();  activa el log
+         *  dd(DB::getQueryLog()); muestra la consulta
+         */
+
+       
+        if ($request->filter == "employee"){
+            $first_name = "";
+            $last_name = "";
+            $search = explode(" ", $request->search);
+            if (count($search) == 3 ){
+                $first_name = $search[0]." ".$search[1];
+                $last_name = $search[2];
+            }
+            if (count($search) == 2 ){
+                $first_name = $search[0];
+                $last_name = $search[1];
+            }
+            if (count($search) == 1 ){
+                $first_name = $search[0];
+            }
+
+        }
+  
+        if ($request->filter == "employee"){
+              
+                $searchlist =  Payroll::with('employee')->select('payrolls.id', 'payrolls.employee_id','payrolls.date', 'payrolls.amount', 'payrolls.concept', 'payrolls.status')
+                ->join('employees', 'employees.id', '=', 'payrolls.employee_id')
+                ->where('employees.fist_name', 'LIKE',  '%'.$first_name.'%')
+                ->where('employees.last_name', 'LIKE',  '%'.$last_name.'%')
+                ->paginate(10);  
+            }
+    
+
+        if ($request->filter == "date"){
+                $searchlist = Payroll::with('employee')->where('date',$request->search)->orderBy('created_at', 'DESC')->paginate(10);
+
+            }
+
+            session()->flash('flash.listsearch', $searchlist);
+            return redirect()->back();
+
+     }
 }
   
